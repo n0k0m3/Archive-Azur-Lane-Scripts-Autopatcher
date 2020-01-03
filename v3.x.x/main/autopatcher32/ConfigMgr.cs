@@ -21,7 +21,8 @@ namespace Azurlane
             Tmp,
             Thirdparty,
             RemoveSkill,
-            ReplaceSkin
+            ReplaceSkin,
+            EasyMode
         }
 
         internal static object GetValue(Key key) => Instance[key];

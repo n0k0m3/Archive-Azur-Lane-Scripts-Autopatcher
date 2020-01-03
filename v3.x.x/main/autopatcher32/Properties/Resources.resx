@@ -124,10 +124,10 @@
     <value>github.com/k0np4ku</value>
   </data>
   <data name="AutopatcherStatus" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/status.txt</value>
+    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/status.txt</value>
   </data>
   <data name="AutopatcherVersion" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/version.txt</value>
+    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/version.txt</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Configuration" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -138,6 +138,12 @@
   </data>
   <data name="EnemySkill" xml:space="preserve">
     <value>enemy_data_skill.lua.txt</value>
+  </data>
+  <data name="MapData" xml:space="preserve">
+    <value>chapter_template.lua.txt</value>
+  </data>
+  <data name="MapDataLoop" xml:space="preserve">
+    <value>chapter_template_loop.lua.txt</value>
   </data>
   <data name="LjdNotFoundMessage" xml:space="preserve">
     <value>Not found: LuaJIT Raw-Bytecode Decompiler (ljd)</value>

@@ -156,6 +156,24 @@ namespace Azurlane.Properties {
                 return ResourceManager.GetString("EnemySkill", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to chapter_template(_loop).txt.
+        /// </summary>
+        internal static string MapData {
+            get {
+                return ResourceManager.GetString("MapData", resourceCulture);
+            }
+        }       
+
+        /// <summary>
+        ///   Looks up a localized string similar to chapter_template(_loop).txt.
+        /// </summary>
+        internal static string MapDataLoop {
+            get {
+                return ResourceManager.GetString("MapDataLoop", resourceCulture);
+            }
+        } 
         
         /// <summary>
         ///   Looks up a localized string similar to Not found: LuaJIT Raw-Bytecode Decompiler (ljd).

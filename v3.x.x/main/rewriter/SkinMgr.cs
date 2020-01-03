@@ -9,13 +9,17 @@ namespace Azurlane
     {
         internal static Configuration Config;
         private const string DataPath = "Skin.ini";
-
+        private static string RewriteRawSkin(this string s)
+        {
+            return new Regex(@"get_id_list_by_ship_group = {[\s\S]*?(?=\n.*?all)").Replace(s, "get_id_list_by_ship_group = {},");
+        }
         internal static string Initialize(Configuration config, string s)
         {
             Config = config;
 
             var rawShip = LoadRawData("*ship_data_statistics.lua*");
             var rawSkin = LoadRawData("*ship_skin_template.lua*");
+            rawSkin = rawSkin.RewriteRawSkin();
 
             if (rawShip == string.Empty && rawSkin == string.Empty)
                 return s;
@@ -51,8 +55,8 @@ namespace Azurlane
             {
                 var shipName = ship.Key;
                 var shipId = ship.Value;
-
-                foreach (var skin in new Regex($"\\[{shipId.Remove(shipId.Length - 1)}.*\\] = {{[^\\[]+}}").Matches(rawSkin))
+                string pattern = @"\["+Regex.Escape(shipId.Remove(shipId.Length - 1))+@".*\] = \{[^\[]+\}";
+                foreach (var skin in new Regex(pattern).Matches(rawSkin))
                 {
                     var skinName = new Regex("name = \"(.*)\"").Match(skin.ToString()).Result("$1");
                     var skinId = new Regex("\\[(.*)\\]").Match(skin.ToString()).Result("$1");

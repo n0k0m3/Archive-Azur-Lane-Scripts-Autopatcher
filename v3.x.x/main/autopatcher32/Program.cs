@@ -139,7 +139,7 @@ namespace Azurlane
 
                 foreach (var mod in ListOfMod.Keys)
                 {
-                    var modName = "scripts-" + mod.ToString().ToLower().Replace("_", "-");
+                    var modName = "scripts32-" + mod.ToString().ToLower().Replace("_", "-");
                     if (File.Exists(PathMgr.Temp(modName))) File.Delete(PathMgr.Temp(modName));
                     if (Directory.Exists(PathMgr.Lua(modName).Replace($"\\{DirName}", ""))) Utils.Rmdir(PathMgr.Lua(modName).Replace($"\\{DirName}", ""));
                 }
@@ -186,6 +186,12 @@ namespace Azurlane
 
             if ((bool)ConfigMgr.GetValue(ConfigMgr.Key.RemoveSkill))
                 AddLua(Properties.Resources.EnemySkill);
+
+            if ((bool)ConfigMgr.GetValue(ConfigMgr.Key.EasyMode))
+            {
+                AddLua(Properties.Resources.MapData);
+                AddLua(Properties.Resources.MapDataLoop);
+            }
         }
 
         [STAThread]
@@ -289,7 +295,7 @@ namespace Azurlane
                         }
                     },
                     () =>
-                    {
+/*                     {
                         try {
                             var showDoneMessage = true;
                             Utils.LogInfo("Decrypting Lua...", true, false);
@@ -312,7 +318,7 @@ namespace Azurlane
                             Utils.LogException("Exception detected during decrypting Lua", e);
                         }
                     },
-                    () =>
+                    () => */
                     {
                         try {
                             Utils.LogInfo("Decompiling Lua...", true, false);
@@ -342,7 +348,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
 
                                     if (!Directory.Exists(PathMgr.Lua(modName)))
                                         Directory.CreateDirectory(PathMgr.Lua(modName));
@@ -406,7 +412,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
                                     foreach (var lua in ListOfLua) {
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
@@ -423,7 +429,7 @@ namespace Azurlane
                             Utils.LogException("Exception detected during recompiling Lua", e);
                         }
                     },
-                    () =>
+/*                     () =>
                     {
                         try {
                             var showDoneMessage = true;
@@ -432,7 +438,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
 
                                     foreach (var lua in ListOfLua) {
                                         Utils.Command($"Azcli.exe --dev --lock \"{PathMgr.Lua(modName, lua)}\"");
@@ -454,7 +460,7 @@ namespace Azurlane
                             Utils.Write(" <failed>", false, true);
                             Utils.LogException("Exception detected during encrypting Lua", e);
                         }
-                    },
+                    }, */
                     DevMode,
                     () =>
                     {
@@ -465,7 +471,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
 
                                     tasks.Add(Task.Factory.StartNew(() =>
                                     {
@@ -492,7 +498,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
                                     Utils.Command($"Azcli.exe --dev --encrypt \"{PathMgr.Temp(modName)}\"");
                                 }
                             }
@@ -512,7 +518,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
 
                                     if (File.Exists(Path.Combine(fileDirectoryPath, modName)))
                                         File.Delete(Path.Combine(fileDirectoryPath, modName));
@@ -584,7 +590,7 @@ namespace Azurlane
                 {
                     if (keyValuePair.Value)
                     {
-                        string name = "scripts-" + keyValuePair.Key.ToString().ToLower().Replace("_", "-");
+                        string name = "scripts32-" + keyValuePair.Key.ToString().ToLower().Replace("_", "-");
                         string path2 = keyValuePair.Key.ToString().ToLower().Replace("_", "-");
                         Directory.CreateDirectory(Path.Combine(text2, path2));
                         foreach (string text3 in Directory.GetFiles(PathMgr.Assets(name), "*.*", SearchOption.AllDirectories))
