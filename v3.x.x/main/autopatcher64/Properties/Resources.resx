@@ -117,21 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Aircraft" xml:space="preserve">
+    <value>aircraft_template.lua.txt</value>
+  </data>
   <data name="Author" xml:space="preserve">
     <value>github.com/k0np4ku</value>
   </data>
-  <data name="CliStatus" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/status.txt</value>
+  <data name="AutopatcherStatus" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/status.txt</value>
   </data>
-  <data name="CliVersion" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/version.txt</value>
+  <data name="AutopatcherVersion" xml:space="preserve">
+    <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/version.txt</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Configuration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Configuration.ini;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Enemy" xml:space="preserve">
+    <value>enemy_data_statistics.lua.txt</value>
+  </data>
+  <data name="EnemySkill" xml:space="preserve">
+    <value>enemy_data_skill.lua.txt</value>
+  </data>
+  <data name="MapData" xml:space="preserve">
+    <value>chapter_template.lua.txt</value>
+  </data>
+  <data name="MapDataLoop" xml:space="preserve">
+    <value>chapter_template_loop.lua.txt</value>
   </data>
   <data name="LjdNotFoundMessage" xml:space="preserve">
     <value>Not found: LuaJIT Raw-Bytecode Decompiler (ljd)</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Lock;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="LuajitNotFoundMessage" xml:space="preserve">
     <value>Not found: LuaJIT Just-In-Time Compiler</value>
@@ -139,8 +154,11 @@
   <data name="Repository" xml:space="preserve">
     <value>github.com/k0np4ku/Azur-Lane-Autopatcher</value>
   </data>
-  <data name="Salt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Salt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Ship" xml:space="preserve">
+    <value>ship_data_statistics.lua.txt</value>
+  </data>
+  <data name="ShipSkin" xml:space="preserve">
+    <value>ship_skin_template.lua.txt</value>
   </data>
   <data name="SolutionPythonMessage" xml:space="preserve">
     <value>Install the latest version of Python to solve this issue</value>
@@ -151,7 +169,7 @@
   <data name="UnityExNotFoundMessage" xml:space="preserve">
     <value>Not found: UnityEx.exe</value>
   </data>
-  <data name="Unlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Unlock;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Weapon" xml:space="preserve">
+    <value>weapon_property.lua.txt</value>
   </data>
 </root>

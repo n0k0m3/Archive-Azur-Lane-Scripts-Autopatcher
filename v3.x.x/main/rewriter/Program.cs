@@ -147,7 +147,15 @@ namespace Azurlane
                 }
 
                 if (filePath.Contains("ship_data_statistics") && config.Other.ReplaceSkin)
+                {
                     content = SkinMgr.Initialize(config, content);
+                }
+
+                if (filePath.Contains("chapter_template") && config.Other.EasyMode)
+                {
+                    content = content.RewriteLimit();
+                    content = content.RewritePLimit();
+                }
                 
                 File.WriteAllText(filePath, content);
             }
@@ -212,6 +220,7 @@ namespace Azurlane
 
             // [Other]
             config.Other.ReplaceSkin = config.GetBool("Other", "ReplaceSkin");
+            config.Other.EasyMode = config.GetBool("Other", "EasyMode");            
         }
 
         private static string RewriteAttribute(this string s, string pattern, string replacement)
@@ -222,6 +231,16 @@ namespace Azurlane
         private static string RewriteGroup(this string s, string pattern, string replacement)
         {
             return new Regex($"({pattern} = \\{{)[^\\}}]+(\\}})").Replace(s, $"$1{replacement}$2");
+        }
+
+        private static string RewriteLimit(this string s)
+        {
+            return new Regex(@"(?<!_)limitation = {[\s\S]*?(?=\n.*?property_limitation)").Replace(s, "limitation = {\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t},");
+        }
+
+        private static string RewritePLimit(this string s)
+        {
+            return new Regex(@"property_limitation = {[\s\S]*?(?=\n.*?expedition)").Replace(s, "property_limitation = {},");
         }
     }
 
@@ -319,6 +338,8 @@ namespace Azurlane
         internal class OOther
         {
             internal bool ReplaceSkin { get; set; }
+            internal bool EasyMode { get; set; }
+            
         }
 
         internal class PPath
