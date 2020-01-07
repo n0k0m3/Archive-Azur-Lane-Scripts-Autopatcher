@@ -153,8 +153,12 @@ namespace Azurlane
 
                 if (filePath.Contains("chapter_template") && config.Other.EasyMode)
                 {
-                    content = content.RewriteLimit();
-                    content = content.RewritePLimit();
+                    content = content.RewriteAttribute("investigation_ratio", "0");
+                    content = content.RewriteLargeGroup("limitation","\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t");
+                    content = content.RewriteLargeGroup("property_limitation", null);
+                    content = content.RewriteLargeGroup("ambush_expedition_list", null);
+                    content = content.RewriteLargeGroup("ambush_event_ratio", null);
+                    content = content.RewriteLargeGroup("ambush_ratio_extra", "\n\t\t\t{\n\t\t\t\t-20000\n\t\t\t}\n\t\t");
                 }
                 
                 File.WriteAllText(filePath, content);
@@ -233,9 +237,9 @@ namespace Azurlane
             return new Regex($"({pattern} = \\{{)[^\\}}]+(\\}})").Replace(s, $"$1{replacement}$2");
         }
 
-        private static string RewriteLimit(this string s)
+        private static string RewriteLargeGroup(this string s, string pattern, string replacement)
         {
-            return new Regex(@"(?<!_)limitation = {[\s\S]*?(?=\n.*?property_limitation)").Replace(s, "limitation = {\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t},");
+            return new Regex(@"((?<!\w)"+pattern+@" = {)[\s\S]*?(},(?=\s+?[a-z]))").Replace(s, $"$1{replacement}$2");
         }
 
         private static string RewritePLimit(this string s)
