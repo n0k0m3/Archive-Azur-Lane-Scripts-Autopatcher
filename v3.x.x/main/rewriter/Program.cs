@@ -1,6 +1,5 @@
 ﻿using Azurlane.IniFileParser;
 using Azurlane.IniFileParser.Model;
-using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
