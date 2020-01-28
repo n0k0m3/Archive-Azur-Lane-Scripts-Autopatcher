@@ -12,4 +12,15 @@ You can download the binary from https://github.com/n0k0m3/Archive-Azur-Lane-Scr
 
 ## Prerequisites (Minimum)
 1. .NET Framework 4.6.1 or newer https://www.microsoft.com/en-us/download/details.aspx?id=49982
-2. Python 3.7.0 or newer, installed to PATH.
+2. Python 3.7.x or newer, installed to PATH. (Python 3.* from Microsoft Store also works and doesn't require add to PATH)
+
+## Installation
+**No installation required**
+
+1. Download latest build and 3rd party tools from https://github.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/releases
+
+2. Extract 3rdparty tools INSIDE your patcher folder (make sure the path will be `ALSA_<version>\3rdparty\*`
+
+**Note:** If the build doesn't include 3rd party tools, it doesn't mean that it is not needed, it means that 3rd party tools are not changed, check for it from older build 
+
+(Latest build with changes in 3rdparty: https://github.com/n0k0m3/Azur-Lane-Scripts-Autopatcher/releases/tag/appveyor-v3.0.3)
