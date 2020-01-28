@@ -416,7 +416,7 @@ namespace Azurlane
                                     foreach (var lua in ListOfLua) {
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
-                                            //Utils.Command($"Azcli.exe --dev --recompile \"{PathMgr.Lua(modName,lua)}\"");
+                                            Utils.Command($"Azcli.exe --dev --recompile \"{PathMgr.Lua(modName,lua)}\"");
                                         }));
                                     }
                                 }
