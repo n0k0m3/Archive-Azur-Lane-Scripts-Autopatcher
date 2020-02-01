@@ -7,9 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cli", "cli\cli.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rewriter", "rewriter\rewriter.csproj", "{93EC7EA6-3FAD-4296-9FA9-A348F7C70068}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autopatcher32", "autopatcher32\autopatcher32.csproj", "{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autopatcher64", "autopatcher64\autopatcher64.csproj", "{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "autopatcher", "autopatcher\autopatcher.csproj", "{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cli64", "cli64\cli64.csproj", "{1AD9518B-8C5C-47EF-878F-77E0BB939A4A}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AD9518B-8C5C-47EF-878F-77E0BB939A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AD9518B-8C5C-47EF-878F-77E0BB939A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AD9518B-8C5C-47EF-878F-77E0BB939A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU

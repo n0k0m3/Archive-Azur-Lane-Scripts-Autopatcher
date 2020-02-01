@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71E4F43A-E749-46C4-B8C5-7ABB8DDE456C}</ProjectGuid>
+    <ProjectGuid>{3E5F2714-8BCE-42CC-A91A-B0A70C747AA8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Azurlane</RootNamespace>
-    <AssemblyName>Azurlane64</AssemblyName>
+    <AssemblyName>Azurlane</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
