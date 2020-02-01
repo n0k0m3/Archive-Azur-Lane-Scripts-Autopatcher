@@ -229,22 +229,6 @@ namespace Azurlane
                 goto END;
             }
 
-            Utils.Write($"{args}",true,true);
-            if (args.Contains("64"))
-            {
-                Arch = @"64";
-                Utils.Write(@"Selected scripts is 64 bits",true,true);
-            }
-            else if (args.Contains("32"))
-            {
-                Arch = @"32";
-                Utils.Write(@"Selected scripts is 32 bits",true,true);
-            }
-            
-            Utils.Write(Arch,true,true);
-            DirName += Arch;
-            Utils.Write(DirName,true,true);
-            
             var filePath = Path.GetFullPath(args[0]);
             var fileDirectoryPath = Path.GetDirectoryName(filePath);
             var fileName = Path.GetFileName(filePath);
@@ -260,6 +244,22 @@ namespace Azurlane
                 Utils.Write("Not a valid AssetBundle file...", true, true);
                 goto END;
             }
+            
+            if (fileName.Contains("64"))
+            {
+                Arch = @"64";
+                Utils.Write(@"Selected scripts is 64 bits",true,true);
+            }
+            else if (fileName.Contains("32"))
+            {
+                Arch = @"32";
+                Utils.Write(@"Selected scripts is 32 bits",true,true);
+            }
+
+            Utils.Write(fileName,true,true);
+            Utils.Write(Arch,true,true);
+            DirName += Arch;
+            Utils.Write(DirName,true,true);
             
             Clean(fileName);
 
