@@ -149,7 +149,7 @@ namespace Azurlane
 
                 foreach (var mod in ListOfMod.Keys)
                 {
-                    var modName = $"scripts32-{mod.ToString().ToLower().Replace("_", "-")}";
+                    var modName = $"scripts{Arch}-{mod.ToString().ToLower().Replace("_", "-")}";
                     if (File.Exists(PathMgr.Temp(modName))) File.Delete(PathMgr.Temp(modName));
                     if (Directory.Exists(PathMgr.Lua(modName).Replace($"\\{DirName}", "")))
                         Utils.Rmdir(PathMgr.Lua(modName).Replace($"\\{DirName}", ""));
@@ -271,10 +271,7 @@ namespace Azurlane
                 Utils.Write(@"Selected scripts is 32 bits", true, true);
             }
 
-            Utils.Write(fileName, true, true);
-            Utils.Write(Arch, true, true);
             DirName += Arch;
-            Utils.Write(DirName, true, true);
 
             Clean(fileName);
 
@@ -382,7 +379,7 @@ namespace Azurlane
                             foreach (var mod in ListOfMod)
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
 
                                     if (!Directory.Exists(PathMgr.Lua(modName)))
                                         Directory.CreateDirectory(PathMgr.Lua(modName));
@@ -442,7 +439,7 @@ namespace Azurlane
                             foreach (var mod in ListOfMod)
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
                                     foreach (var lua in ListOfLua)
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
@@ -469,7 +466,7 @@ namespace Azurlane
                             {
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
 
                                     foreach (var lua in ListOfLua) {
                                         Utils.Command($"Azcli.exe --dev --lock \"{PathMgr.Lua(modName, lua)}\"");
@@ -502,7 +499,7 @@ namespace Azurlane
                             foreach (var mod in ListOfMod)
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
 
                                     tasks.Add(Task.Factory.StartNew(() =>
                                     {
@@ -529,7 +526,7 @@ namespace Azurlane
                             foreach (var mod in ListOfMod)
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
                                     Utils.Command($"Azcli.exe --dev --encrypt \"{PathMgr.Temp(modName)}\"");
                                 }
 
@@ -549,7 +546,7 @@ namespace Azurlane
                             foreach (var mod in ListOfMod)
                                 if (mod.Value)
                                 {
-                                    var modName = ("scripts32-" + mod.Key).ToLower().Replace("_", "-");
+                                    var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
 
                                     if (File.Exists(Path.Combine(fileDirectoryPath, modName)))
                                         File.Delete(Path.Combine(fileDirectoryPath, modName));
@@ -616,7 +613,7 @@ namespace Azurlane
                 foreach (var keyValuePair in ListOfMod)
                     if (keyValuePair.Value)
                     {
-                        var name = $"scripts32-{keyValuePair.Key.ToString().ToLower().Replace("_", "-")}";
+                        var name = $"scripts{Arch}-{keyValuePair.Key.ToString().ToLower().Replace("_", "-")}";
                         var path2 = keyValuePair.Key.ToString().ToLower().Replace("_", "-");
                         Directory.CreateDirectory(Path.Combine(text2, path2));
                         foreach (var text3 in Directory.GetFiles(PathMgr.Assets(name), "*.*",
