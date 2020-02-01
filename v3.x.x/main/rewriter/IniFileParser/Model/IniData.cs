@@ -1,4 +1,3 @@
-using System;
 using Azurlane.IniFileParser.Model.Configuration;
 using Azurlane.IniFileParser.Model.Formatting;
 
@@ -9,126 +8,22 @@ namespace Azurlane.IniFileParser.Model
     /// </summary>
     public class IniData : ICloneable
     {
+        #region Fields
+
+        /// <summary>
+        ///     See property <see cref="Configuration" /> for more information.
+        /// </summary>
+        private IniParserConfiguration _configuration;
+
+        #endregion
+
         #region Non-Public Members
+
         /// <summary>
         ///     Represents all sections from an INI file
         /// </summary>
         private SectionDataCollection _sections;
-        #endregion
 
-        #region Initialization
-
-        /// <summary>
-        ///     Initializes an empty IniData instance.
-        /// </summary>
-        public IniData()
-            : this(new SectionDataCollection())
-        { }
-
-        /// <summary>
-        ///     Initializes a new IniData instance using a previous
-        ///     <see cref="SectionDataCollection"/>.
-        /// </summary>
-        /// <param name="sdc">
-        ///     <see cref="SectionDataCollection"/> object containing the
-        ///     data with the sections of the file
-        /// </param>
-        public IniData(SectionDataCollection sdc)
-        {
-            _sections = (SectionDataCollection)sdc.Clone();
-            Global = new KeyDataCollection();
-            SectionKeySeparator = '.';
-        }
-
-        public IniData(IniData ori): this((SectionDataCollection)ori.Sections)
-        {
-            Global = (KeyDataCollection)ori.Global.Clone();
-            Configuration = ori.Configuration.Clone();
-        }
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Configuration used to write an ini file with the proper
-        ///     delimiter characters and data.
-        /// </summary>
-        /// <remarks>
-        ///     If the <see cref="IniData"/> instance was created by a parser,
-        ///     this instance is a copy of the <see cref="IniParserConfiguration"/> used
-        ///     by the parser (i.e. different objects instances)
-        ///     If this instance is created programatically without using a parser, this
-        ///     property returns an instance of <see cref=" IniParserConfiguration"/>
-        /// </remarks>
-        public IniParserConfiguration Configuration
-        {
-            get
-            {
-                // Lazy initialization
-                if (_configuration == null)
-                    _configuration = new IniParserConfiguration();
-
-                return _configuration;
-            }
-
-            set { _configuration = value.Clone(); }
-        }
-
-        /// <summary>
-        /// 	Global sections. Contains key/value pairs which are not
-        /// 	enclosed in any section (i.e. they are defined at the beginning 
-        /// 	of the file, before any section.
-        /// </summary>
-        public KeyDataCollection Global { get; protected set; }
-
-        /// <summary>
-        /// Gets the <see cref="KeyDataCollection"/> instance 
-        /// with the specified section name.
-        /// </summary>
-        public KeyDataCollection this[string sectionName]
-        {
-            get
-            {
-                if (!_sections.ContainsSection(sectionName))
-                    if (Configuration.AllowCreateSectionsOnFly)
-                        _sections.AddSection(sectionName);
-                    else
-                        return null;
-
-                return _sections[sectionName];
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets all the <see cref="SectionData"/> 
-        /// for this IniData instance.
-        /// </summary>
-        public SectionDataCollection Sections
-        {
-            get { return _sections; }
-            set { _sections = value; }
-        }
-
-        /// <summary>
-        ///     Used to mark the separation between the section name and the key name 
-        ///     when using <see cref="IniData.TryGetKey"/>. 
-        /// </summary>
-        /// <remarks>
-        ///     Defaults to '.'.
-        /// </remarks>
-        public char SectionKeySeparator { get; set; }
-        #endregion
-
-        #region Object Methods
-        public override string ToString()
-        {
-            return ToString(new DefaultIniDataFormatter(Configuration));
-        }
-
-        public virtual string ToString(IIniDataFormatter formatter)
-        {
-            return formatter.IniDataToString(this);
-        }
         #endregion
 
         #region ICloneable Members
@@ -146,13 +41,6 @@ namespace Azurlane.IniFileParser.Model
 
         #endregion
 
-        #region Fields
-        /// <summary>
-        ///     See property <see cref="Configuration"/> for more information. 
-        /// </summary>
-        private IniParserConfiguration _configuration;
-        #endregion
-
         /// <summary>
         ///     Deletes all comments in all sections and key values
         /// </summary>
@@ -160,10 +48,7 @@ namespace Azurlane.IniFileParser.Model
         {
             Global.ClearComments();
 
-            foreach(var section in Sections)
-            {
-                section.ClearComments();
-            }
+            foreach (var section in Sections) section.ClearComments();
         }
 
         /// <summary>
@@ -171,29 +56,25 @@ namespace Azurlane.IniFileParser.Model
         ///     Comments get appended.
         /// </summary>
         /// <param name="toMergeIniData">
-        ///     IniData instance to merge into this. 
+        ///     IniData instance to merge into this.
         ///     If it is null this operation does nothing.
         /// </param>
         public void Merge(IniData toMergeIniData)
         {
-
             if (toMergeIniData == null) return;
 
             Global.Merge(toMergeIniData.Global);
 
             Sections.Merge(toMergeIniData.Sections);
-
         }
 
         /// <summary>
-        ///     Attempts to retrieve a key, using a single string combining section and 
+        ///     Attempts to retrieve a key, using a single string combining section and
         ///     key name.
         /// </summary>
         /// <param name="key">
-        ///     The section and key name to retrieve, separated by <see cref="IniParserConfiguration.SectionKeySeparator"/>.
-        /// 
-        ///     If key contains no separator, it is treated as a key in the <see cref="Global"/> section.
-        /// 
+        ///     The section and key name to retrieve, separated by <see cref="IniParserConfiguration.SectionKeySeparator" />.
+        ///     If key contains no separator, it is treated as a key in the <see cref="Global" /> section.
         ///     Key may contain no more than one separator character.
         /// </param>
         /// <param name="value">
@@ -243,10 +124,8 @@ namespace Azurlane.IniFileParser.Model
         ///     Retrieves a key using a single input string combining section and key name.
         /// </summary>
         /// <param name="key">
-        ///     The section and key name to retrieve, separated by <see cref="IniParserConfiguration.SectionKeySeparator"/>.
-        /// 
-        ///     If key contains no separator, it is treated as a key in the <see cref="Global"/> section.
-        /// 
+        ///     The section and key name to retrieve, separated by <see cref="IniParserConfiguration.SectionKeySeparator" />.
+        ///     If key contains no separator, it is treated as a key in the <see cref="Global" /> section.
         ///     Key may contain no more than one separator character.
         /// </param>
         /// <returns>
@@ -267,10 +146,7 @@ namespace Azurlane.IniFileParser.Model
         private void MergeSection(SectionData otherSection)
         {
             // no overlap -> create no section
-            if (!Sections.ContainsSection(otherSection.SectionName))
-            {
-                Sections.AddSection(otherSection.SectionName);
-            }
+            if (!Sections.ContainsSection(otherSection.SectionName)) Sections.AddSection(otherSection.SectionName);
 
             // merge section into the new one
             Sections.GetSectionData(otherSection.SectionName).Merge(otherSection);
@@ -281,10 +157,127 @@ namespace Azurlane.IniFileParser.Model
         /// </summary>
         private void MergeGlobal(KeyDataCollection globals)
         {
-            foreach (var globalValue in globals)
+            foreach (var globalValue in globals) Global[globalValue.KeyName] = globalValue.Value;
+        }
+
+        #region Initialization
+
+        /// <summary>
+        ///     Initializes an empty IniData instance.
+        /// </summary>
+        public IniData()
+            : this(new SectionDataCollection())
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new IniData instance using a previous
+        ///     <see cref="SectionDataCollection" />.
+        /// </summary>
+        /// <param name="sdc">
+        ///     <see cref="SectionDataCollection" /> object containing the
+        ///     data with the sections of the file
+        /// </param>
+        public IniData(SectionDataCollection sdc)
+        {
+            _sections = (SectionDataCollection) sdc.Clone();
+            Global = new KeyDataCollection();
+            SectionKeySeparator = '.';
+        }
+
+        public IniData(IniData ori) : this(ori.Sections)
+        {
+            Global = (KeyDataCollection) ori.Global.Clone();
+            Configuration = ori.Configuration.Clone();
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///     Configuration used to write an ini file with the proper
+        ///     delimiter characters and data.
+        /// </summary>
+        /// <remarks>
+        ///     If the <see cref="IniData" /> instance was created by a parser,
+        ///     this instance is a copy of the <see cref="IniParserConfiguration" /> used
+        ///     by the parser (i.e. different objects instances)
+        ///     If this instance is created programatically without using a parser, this
+        ///     property returns an instance of <see cref=" IniParserConfiguration" />
+        /// </remarks>
+        public IniParserConfiguration Configuration
+        {
+            get
             {
-                Global[globalValue.KeyName] = globalValue.Value;
+                // Lazy initialization
+                if (_configuration == null)
+                    _configuration = new IniParserConfiguration();
+
+                return _configuration;
+            }
+
+            set => _configuration = value.Clone();
+        }
+
+        /// <summary>
+        ///     Global sections. Contains key/value pairs which are not
+        ///     enclosed in any section (i.e. they are defined at the beginning
+        ///     of the file, before any section.
+        /// </summary>
+        public KeyDataCollection Global { get; protected set; }
+
+        /// <summary>
+        ///     Gets the <see cref="KeyDataCollection" /> instance
+        ///     with the specified section name.
+        /// </summary>
+        public KeyDataCollection this[string sectionName]
+        {
+            get
+            {
+                if (!_sections.ContainsSection(sectionName))
+                    if (Configuration.AllowCreateSectionsOnFly)
+                        _sections.AddSection(sectionName);
+                    else
+                        return null;
+
+                return _sections[sectionName];
             }
         }
+
+        /// <summary>
+        ///     Gets or sets all the <see cref="SectionData" />
+        ///     for this IniData instance.
+        /// </summary>
+        public SectionDataCollection Sections
+        {
+            get => _sections;
+            set => _sections = value;
+        }
+
+        /// <summary>
+        ///     Used to mark the separation between the section name and the key name
+        ///     when using <see cref="IniData.TryGetKey" />.
+        /// </summary>
+        /// <remarks>
+        ///     Defaults to '.'.
+        /// </remarks>
+        public char SectionKeySeparator { get; set; }
+
+        #endregion
+
+        #region Object Methods
+
+        public override string ToString()
+        {
+            return ToString(new DefaultIniDataFormatter(Configuration));
+        }
+
+        public virtual string ToString(IIniDataFormatter formatter)
+        {
+            return formatter.IniDataToString(this);
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Azurlane.IniFileParser.Model
 {
     /// <summary>
@@ -9,81 +6,6 @@ namespace Azurlane.IniFileParser.Model
     /// </summary>
     public class KeyData : ICloneable
     {
-        #region Initialization
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="KeyData"/> class.
-        /// </summary>
-        public KeyData(string keyName)
-        {
-            if(string.IsNullOrEmpty(keyName))
-                throw new ArgumentException("key name can not be empty");
-
-            _comments = new List<string>();
-            _value = string.Empty;
-            _keyName = keyName;
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="KeyData"/> class
-        ///     from a previous instance of <see cref="KeyData"/>.
-        /// </summary>
-        /// <remarks>
-        ///     Data is deeply copied
-        /// </remarks>
-        /// <param name="ori">
-        ///     The instance of the <see cref="KeyData"/> class 
-        ///     used to create the new instance.
-        /// </param>
-        public KeyData(KeyData ori)
-        {
-            _value = ori._value;
-            _keyName = ori._keyName;
-            _comments = new List<string>(ori._comments);
-        }
-
-        #endregion Constructors 
-
-        #region Properties 
-
-        /// <summary>
-        /// Gets or sets the comment list associated to this key.
-        /// </summary>
-        public List<string> Comments
-        {
-            get { return _comments; }
-            set { _comments = new List<string> (value) ; }
-        }
-
-        /// <summary>
-        ///     Gets or sets the value associated to this key.
-        /// </summary>
-        public string Value
-        {
-            get { return _value; }
-            set { _value = value; }
-        }
-
-        /// <summary>
-        ///     Gets or sets the name of the key.
-        /// </summary>
-        public string KeyName
-        {
-            get
-            {
-                return _keyName;
-            }
-
-            set
-            {
-                if (value != string.Empty)
-                    _keyName = value;
-            }
-
-        }
-
-        #endregion Properties 
-
         #region ICloneable Members
 
         /// <summary>
@@ -99,13 +21,79 @@ namespace Azurlane.IniFileParser.Model
 
         #endregion
 
+        #region Initialization
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="KeyData" /> class.
+        /// </summary>
+        public KeyData(string keyName)
+        {
+            if (string.IsNullOrEmpty(keyName))
+                throw new ArgumentException("key name can not be empty");
+
+            _comments = new List<string>();
+            Value = string.Empty;
+            _keyName = keyName;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="KeyData" /> class
+        ///     from a previous instance of <see cref="KeyData" />.
+        /// </summary>
+        /// <remarks>
+        ///     Data is deeply copied
+        /// </remarks>
+        /// <param name="ori">
+        ///     The instance of the <see cref="KeyData" /> class
+        ///     used to create the new instance.
+        /// </param>
+        public KeyData(KeyData ori)
+        {
+            Value = ori.Value;
+            _keyName = ori._keyName;
+            _comments = new List<string>(ori._comments);
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        ///     Gets or sets the comment list associated to this key.
+        /// </summary>
+        public List<string> Comments
+        {
+            get => _comments;
+            set => _comments = new List<string>(value);
+        }
+
+        /// <summary>
+        ///     Gets or sets the value associated to this key.
+        /// </summary>
+        public string Value { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the name of the key.
+        /// </summary>
+        public string KeyName
+        {
+            get => _keyName;
+
+            set
+            {
+                if (value != string.Empty)
+                    _keyName = value;
+            }
+        }
+
+        #endregion Properties
+
         #region Non-public Members
 
         // List with comment lines associated to this key 
         private List<string> _comments;
 
         // Unique value associated to this key
-        private string _value;
 
         // Name of the current key
         private string _keyName;

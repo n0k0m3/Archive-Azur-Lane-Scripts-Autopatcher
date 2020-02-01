@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using Azurlane.IniFileParser.Exceptions;
+﻿using Azurlane.IniFileParser.Exceptions;
 using Azurlane.IniFileParser.Model;
 using Azurlane.IniFileParser.Parser;
 
@@ -15,7 +12,9 @@ namespace Azurlane.IniFileParser
         /// <summary>
         ///     Ctor
         /// </summary>
-        public FileIniDataParser() {}
+        public FileIniDataParser()
+        {
+        }
 
         /// <summary>
         ///     Ctor
@@ -26,26 +25,11 @@ namespace Azurlane.IniFileParser
             Parser = parser;
         }
 
-        #region Deprecated methods
-
-        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
-        public IniData LoadFile(string filePath)
-        {
-            return ReadFile(filePath);
-        }
-
-        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
-        public IniData LoadFile(string filePath, Encoding fileEncoding)
-        {
-            return ReadFile(filePath, fileEncoding);
-        }
-        #endregion
-
         /// <summary>
         ///     Implements reading ini data from a file.
         /// </summary>
         /// <remarks>
-        ///     Uses <see cref="Encoding.Default"/> codification for the file.
+        ///     Uses <see cref="Encoding.Default" /> codification for the file.
         /// </remarks>
         /// <param name="filePath">
         ///     Path to the file
@@ -85,7 +69,6 @@ namespace Azurlane.IniFileParser
             {
                 throw new ParsingException(String.Format("Could not parse file {0}", filePath), ex);
             }
-
         }
 
         /// <summary>
@@ -105,7 +88,7 @@ namespace Azurlane.IniFileParser
         {
             WriteFile(filePath, parsedData, Encoding.UTF8);
         }
-                             
+
         /// <summary>
         ///     Writes INI data to a text file.
         /// </summary>
@@ -122,8 +105,8 @@ namespace Azurlane.IniFileParser
         {
             // The default value can't be assigned as a default parameter value because it is not
             // a constant expression.
-			if (fileEncoding == null)
-				fileEncoding = Encoding.UTF8;
+            if (fileEncoding == null)
+                fileEncoding = Encoding.UTF8;
 
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentException("Bad filename.");
@@ -139,5 +122,21 @@ namespace Azurlane.IniFileParser
                 }
             }
         }
+
+        #region Deprecated methods
+
+        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
+        public IniData LoadFile(string filePath)
+        {
+            return ReadFile(filePath);
+        }
+
+        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
+        public IniData LoadFile(string filePath, Encoding fileEncoding)
+        {
+            return ReadFile(filePath, fileEncoding);
+        }
+
+        #endregion
     }
 }

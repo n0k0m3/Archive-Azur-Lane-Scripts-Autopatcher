@@ -1,62 +1,58 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Azurlane.IniFileParser.Model.Configuration;
 
 namespace Azurlane.IniFileParser.Model.Formatting
 {
-    
     public class DefaultIniDataFormatter : IIniDataFormatter
     {
-        IniParserConfiguration _configuration;
-        
-        #region Initialization
-        public DefaultIniDataFormatter():this(new IniParserConfiguration()) {}
-        
-        public DefaultIniDataFormatter(IniParserConfiguration configuration)
-        {
-            if (configuration == null)
-                throw new ArgumentNullException("configuration");
-            this.Configuration = configuration;
-        }
-        #endregion
-        
+        private IniParserConfiguration _configuration;
+
         public virtual string IniDataToString(IniData iniData)
         {
             var sb = new StringBuilder();
 
             if (Configuration.AllowKeysWithoutSection)
-            {
                 // Write global key/value data
                 WriteKeyValueData(iniData.Global, sb);
-            }
 
             //Write sections
             foreach (SectionData section in iniData.Sections)
-            {
                 //Write current section
                 WriteSection(section, sb);
-            }
 
             return sb.ToString();
         }
-        
+
         /// <summary>
         ///     Configuration used to write an ini file with the proper
         ///     delimiter characters and data.
         /// </summary>
         /// <remarks>
-        ///     If the <see cref="IniData"/> instance was created by a parser,
-        ///     this instance is a copy of the <see cref="IniParserConfiguration"/> used
+        ///     If the <see cref="IniData" /> instance was created by a parser,
+        ///     this instance is a copy of the <see cref="IniParserConfiguration" /> used
         ///     by the parser (i.e. different objects instances)
         ///     If this instance is created programatically without using a parser, this
-        ///     property returns an instance of <see cref=" IniParserConfiguration"/>
+        ///     property returns an instance of <see cref=" IniParserConfiguration" />
         /// </remarks>
         public IniParserConfiguration Configuration
         {
-            get { return _configuration; }
-            set { _configuration = value.Clone(); }
+            get => _configuration;
+            set => _configuration = value.Clone();
         }
+
+        #region Initialization
+
+        public DefaultIniDataFormatter() : this(new IniParserConfiguration())
+        {
+        }
+
+        public DefaultIniDataFormatter(IniParserConfiguration configuration)
+        {
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
+            Configuration = configuration;
+        }
+
+        #endregion
 
         #region Helpers
 
@@ -69,10 +65,10 @@ namespace Azurlane.IniFileParser.Model.Formatting
             WriteComments(section.LeadingComments, sb);
 
             //Write section name
-            sb.Append(string.Format("{0}{1}{2}{3}", 
-                Configuration.SectionStartChar, 
-                section.SectionName, 
-                Configuration.SectionEndChar, 
+            sb.Append(string.Format("{0}{1}{2}{3}",
+                Configuration.SectionStartChar,
+                section.SectionName,
+                Configuration.SectionEndChar,
                 Configuration.NewLineStr));
 
             WriteKeyValueData(section.Keys, sb);
@@ -83,7 +79,6 @@ namespace Azurlane.IniFileParser.Model.Formatting
 
         private void WriteKeyValueData(KeyDataCollection keyDataCollection, StringBuilder sb)
         {
-
             foreach (KeyData keyData in keyDataCollection)
             {
                 // Add a blank line if the key value pair has comments
@@ -93,11 +88,11 @@ namespace Azurlane.IniFileParser.Model.Formatting
                 WriteComments(keyData.Comments, sb);
 
                 //Write key and value
-                sb.Append(string.Format("{0}{3}{1}{3}{2}{4}", 
+                sb.Append(string.Format("{0}{3}{1}{3}{2}{4}",
                     keyData.KeyName,
-                    Configuration.KeyValueAssigmentChar, 
-                    keyData.Value, 
-                    Configuration.AssigmentSpacer, 
+                    Configuration.KeyValueAssigmentChar,
+                    keyData.Value,
+                    Configuration.AssigmentSpacer,
                     Configuration.NewLineStr));
             }
         }
@@ -107,8 +102,7 @@ namespace Azurlane.IniFileParser.Model.Formatting
             foreach (string comment in comments)
                 sb.Append(string.Format("{0}{1}{2}", Configuration.CommentString, comment, Configuration.NewLineStr));
         }
+
         #endregion
-        
     }
-    
-} 
+}

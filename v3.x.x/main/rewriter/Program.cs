@@ -1,13 +1,14 @@
 ﻿using Azurlane.IniFileParser;
 using Azurlane.IniFileParser.Model;
-using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Azurlane
 {
     internal static class Program
     {
-        private static bool GetBool(this Configuration config, string section, string key) => config.Ini[section][key].ToLower() == "true";
+        private static bool GetBool(this Configuration config, string section, string key)
+        {
+            return config.Ini[section][key].ToLower() == "true";
+        }
 
         private static string GetString(this Configuration config, string section, string key)
         {
@@ -15,7 +16,10 @@ namespace Azurlane
             return value.ToLower() == "false" || value.ToLower() == "ignore" ? "ignore" : value;
         }
 
-        private static bool IsIgnore(this string s) => s == "ignore";
+        private static bool IsIgnore(this string s)
+        {
+            return s == "ignore";
+        }
 
         private static void Load(this Configuration config, string configPath)
         {
@@ -147,20 +151,20 @@ namespace Azurlane
                 }
 
                 if (filePath.Contains("ship_data_statistics") && config.Other.ReplaceSkin)
-                {
                     content = SkinMgr.Initialize(config, content);
-                }
 
                 if (filePath.Contains("chapter_template") && config.Other.EasyMode)
                 {
                     content = content.RewriteAttribute("investigation_ratio", "0");
-                    content = content.RewriteLargeGroup("limitation","\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t");
+                    content = content.RewriteLargeGroup("limitation",
+                        "\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t");
                     content = content.RewriteLargeGroup("property_limitation", null);
                     content = content.RewriteLargeGroup("ambush_expedition_list", null);
                     content = content.RewriteLargeGroup("ambush_event_ratio", null);
-                    content = content.RewriteLargeGroup("ambush_ratio_extra", "\n\t\t\t{\n\t\t\t\t-20000\n\t\t\t}\n\t\t");
+                    content = content.RewriteLargeGroup("ambush_ratio_extra",
+                        "\n\t\t\t{\n\t\t\t\t-20000\n\t\t\t}\n\t\t");
                 }
-                
+
                 File.WriteAllText(filePath, content);
             }
         }
@@ -224,7 +228,7 @@ namespace Azurlane
 
             // [Other]
             config.Other.ReplaceSkin = config.GetBool("Other", "ReplaceSkin");
-            config.Other.EasyMode = config.GetBool("Other", "EasyMode");            
+            config.Other.EasyMode = config.GetBool("Other", "EasyMode");
         }
 
         private static string RewriteAttribute(this string s, string pattern, string replacement)
@@ -239,12 +243,14 @@ namespace Azurlane
 
         private static string RewriteLargeGroup(this string s, string pattern, string replacement)
         {
-            return new Regex(@"((?<!\w)"+pattern+@" = {)[\s\S]*?(},(?=\s+?[a-z]))").Replace(s, $"$1{replacement}$2");
+            return new Regex(@"((?<!\w)" + pattern + @" = {)[\s\S]*?(},(?=\s+?[a-z]))")
+                .Replace(s, $"$1{replacement}$2");
         }
 
         private static string RewritePLimit(this string s)
         {
-            return new Regex(@"property_limitation = {[\s\S]*?(?=\n.*?expedition)").Replace(s, "property_limitation = {},");
+            return new Regex(@"property_limitation = {[\s\S]*?(?=\n.*?expedition)").Replace(s,
+                "property_limitation = {},");
         }
     }
 
@@ -343,7 +349,6 @@ namespace Azurlane
         {
             internal bool ReplaceSkin { get; set; }
             internal bool EasyMode { get; set; }
-            
         }
 
         internal class PPath

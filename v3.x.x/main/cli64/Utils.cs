@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-
-namespace Azurlane
+﻿namespace Azurlane
 {
     public class Utils
     {
@@ -21,7 +17,10 @@ namespace Azurlane
             }
         }
 
-        internal static void LogDebug(string message, bool space, bool writeLine, params object[] arg) => Write($@"[{DateTime.Now:HH:mm}][DEBUG]> {message}", space, writeLine, arg);
+        internal static void LogDebug(string message, bool space, bool writeLine, params object[] arg)
+        {
+            Write($@"[{DateTime.Now:HH:mm}][DEBUG]> {message}", space, writeLine, arg);
+        }
 
         internal static void LogException(string message, Exception exception)
         {
@@ -54,7 +53,10 @@ namespace Azurlane
             }
         }
 
-        internal static void LogInfo(string message, bool space, bool writeLine, params object[] arg) => Write($@"[{DateTime.Now:HH:mm}][INFO]> {message}", space, writeLine, arg);
+        internal static void LogInfo(string message, bool space, bool writeLine, params object[] arg)
+        {
+            Write($@"[{DateTime.Now:HH:mm}][INFO]> {message}", space, writeLine, arg);
+        }
 
         internal static void Write(string message, bool space, bool writeLine, params object[] arg)
         {

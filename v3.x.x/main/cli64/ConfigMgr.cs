@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace Azurlane
+﻿namespace Azurlane
 {
     internal static class ConfigMgr
     {
@@ -14,20 +10,16 @@ namespace Azurlane
                 Instance = new Dictionary<Key, object>();
         }
 
-        internal enum Key
+        internal static object GetValue(Key key)
         {
-            Version,
-            Thirdparty
+            return Instance[key];
         }
-
-        internal static object GetValue(Key key) => Instance[key];
 
         internal static void Initialize()
         {
             var iniPath = PathMgr.Local("Configuration.ini");
 
             foreach (var line in File.ReadAllLines(iniPath))
-            {
                 if (line.Contains("="))
                 {
                     var s = line.Split('=');
@@ -35,18 +27,31 @@ namespace Azurlane
                     object value = s[1];
 
                     foreach (Key keyName in Enum.GetValues(typeof(Key)))
-                    {
                         if (key.Compare(keyName))
                             Add(keyName, value.GetValue());
-                    }
                 }
-            }
         }
 
-        private static void Add(Key key, object obj) => Instance.Add(key, obj);
+        private static void Add(Key key, object obj)
+        {
+            Instance.Add(key, obj);
+        }
 
-        private static bool Compare(this string s, Key key) => s == key.ToString();
+        private static bool Compare(this string s, Key key)
+        {
+            return s == key.ToString();
+        }
 
-        private static object GetValue(this object o) => ((string)o).ToLower() == "true" ? true : ((string)o).ToLower() == "ignore" || ((string)o).ToLower() == "false" ? false : o;
+        private static object GetValue(this object o)
+        {
+            return ((string) o).ToLower() == "true" ? true :
+                ((string) o).ToLower() == "ignore" || ((string) o).ToLower() == "false" ? false : o;
+        }
+
+        internal enum Key
+        {
+            Version,
+            Thirdparty
+        }
     }
 }

@@ -1,39 +1,154 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Azurlane.IniFileParser.Exceptions;
+﻿using Azurlane.IniFileParser.Exceptions;
 using Azurlane.IniFileParser.Model;
 using Azurlane.IniFileParser.Model.Configuration;
 
 namespace Azurlane.IniFileParser.Parser
 {
-	/// <summary>
-	/// 	Responsible for parsing an string from an ini file, and creating
-	/// 	an <see cref="IniData"/> structure.
-	/// </summary>
+    /// <summary>
+    ///     Responsible for parsing an string from an ini file, and creating
+    ///     an <see cref="IniData" /> structure.
+    /// </summary>
     public class IniDataParser
     {
         #region Private
+
         // Holds a list of the exceptions catched while parsing
         private List<Exception> _errorExceptions;
+
+        #endregion
+
+        #region Operations
+
+        /// <summary>
+        ///     Parses a string containing valid ini data
+        /// </summary>
+        /// <param name="iniDataString">
+        ///     String with data
+        /// </param>
+        /// <returns>
+        ///     An <see cref="IniData" /> instance with the data contained in
+        ///     the <paramref name="iniDataString" /> correctly parsed an structured.
+        /// </returns>
+        /// <exception cref="ParsingException">
+        ///     Thrown if the data could not be parsed
+        /// </exception>
+        public IniData Parse(string iniDataString)
+        {
+            var iniData = Configuration.CaseInsensitive ? new IniDataCaseInsensitive() : new IniData();
+            iniData.Configuration = Configuration.Clone();
+
+            if (string.IsNullOrEmpty(iniDataString)) return iniData;
+
+            _errorExceptions.Clear();
+            _currentCommentListTemp.Clear();
+            _currentSectionNameTemp = null;
+
+            try
+            {
+                var lines = iniDataString.Split(new[] {"\n", "\r\n"}, StringSplitOptions.None);
+                for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
+                {
+                    var line = lines[lineNumber];
+
+                    if (line.Trim() == String.Empty) continue;
+
+                    try
+                    {
+                        ProcessLine(line, iniData);
+                    }
+                    catch (Exception ex)
+                    {
+                        var errorEx = new ParsingException(ex.Message, lineNumber + 1, line, ex);
+                        if (Configuration.ThrowExceptionsOnError)
+                            throw errorEx;
+                        _errorExceptions.Add(errorEx);
+                    }
+                }
+
+                // Orphan comments, assing to last section/key value
+                if (_currentCommentListTemp.Count > 0)
+                {
+                    // Check if there are actually sections in the file
+                    if (iniData.Sections.Count > 0)
+                        iniData.Sections.GetSectionData(_currentSectionNameTemp).TrailingComments
+                            .AddRange(_currentCommentListTemp);
+                    // No sections, put the comment in the last key value pair
+                    // but only if the ini file contains at least one key-value pair
+                    else if (iniData.Global.Count > 0)
+                        iniData.Global.GetLast().Comments
+                            .AddRange(_currentCommentListTemp);
+
+
+                    _currentCommentListTemp.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                _errorExceptions.Add(ex);
+                if (Configuration.ThrowExceptionsOnError) throw;
+            }
+
+
+            if (HasError) return null;
+            return (IniData) iniData.Clone();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        ///     Adds a key to a concrete <see cref="KeyDataCollection" /> instance, checking
+        ///     if duplicate keys are allowed in the configuration
+        /// </summary>
+        /// <param name="key">
+        ///     Key name
+        /// </param>
+        /// <param name="value">
+        ///     Key's value
+        /// </param>
+        /// <param name="keyDataCollection">
+        ///     <see cref="KeyData" /> collection where the key should be inserted
+        /// </param>
+        /// <param name="sectionName">
+        ///     Name of the section where the <see cref="KeyDataCollection" /> is contained.
+        ///     Used only for logging purposes.
+        /// </param>
+        private void AddKeyToKeyValueCollection(string key, string value, KeyDataCollection keyDataCollection,
+            string sectionName)
+        {
+            // Check for duplicated keys
+            if (keyDataCollection.ContainsKey(key))
+                // We already have a key with the same name defined in the current section
+                HandleDuplicatedKeyInCollection(key, value, keyDataCollection, sectionName);
+            else
+                // Save the keys
+                keyDataCollection.AddKey(key, value);
+
+            keyDataCollection.GetKeyData(key).Comments = _currentCommentListTemp;
+            _currentCommentListTemp.Clear();
+        }
+
         #endregion
 
         #region Initialization
+
         /// <summary>
         ///     Ctor
         /// </summary>
         /// <remarks>
-        ///     The parser uses a <see cref="IniParserConfiguration"/> by default
+        ///     The parser uses a <see cref="IniParserConfiguration" /> by default
         /// </remarks>
         public IniDataParser()
             : this(new IniParserConfiguration())
-        { }
+        {
+        }
 
         /// <summary>
         ///     Ctor
         /// </summary>
         /// <param name="parserConfiguration">
-        ///     Parser's <see cref="IniParserConfiguration"/> instance.
+        ///     Parser's <see cref="IniParserConfiguration" /> instance.
         /// </param>
         public IniDataParser(IniParserConfiguration parserConfiguration)
         {
@@ -48,6 +163,7 @@ namespace Azurlane.IniFileParser.Parser
         #endregion
 
         #region State
+
         /// <summary>
         ///     Configuration that defines the behaviour and constraints
         ///     that the parser must follow.
@@ -55,118 +171,25 @@ namespace Azurlane.IniFileParser.Parser
         public virtual IniParserConfiguration Configuration { get; protected set; }
 
         /// <summary>
-        /// True is the parsing operation encounter any problem
+        ///     True is the parsing operation encounter any problem
         /// </summary>
-        public bool HasError { get { return _errorExceptions.Count > 0; } }
+        public bool HasError => _errorExceptions.Count > 0;
 
         /// <summary>
-        /// Returns the list of errors found while parsing the ini file.
+        ///     Returns the list of errors found while parsing the ini file.
         /// </summary>
         /// <remarks>
-        /// If the configuration option ThrowExceptionOnError is false it can contain one element
-        /// for each problem found while parsing; otherwise it will only contain the very same 
-        /// exception that was raised.
+        ///     If the configuration option ThrowExceptionOnError is false it can contain one element
+        ///     for each problem found while parsing; otherwise it will only contain the very same
+        ///     exception that was raised.
         /// </remarks>
 
-        public ReadOnlyCollection<Exception> Errors {get {return _errorExceptions.AsReadOnly();} }
-		#endregion
+        public ReadOnlyCollection<Exception> Errors => _errorExceptions.AsReadOnly();
 
-		#region Operations
-
-        /// <summary>
-        ///     Parses a string containing valid ini data
-        /// </summary>
-        /// <param name="iniDataString">
-        ///     String with data
-        /// </param>
-        /// <returns>
-        ///     An <see cref="IniData"/> instance with the data contained in
-        ///     the <paramref name="iniDataString"/> correctly parsed an structured.
-        /// </returns>
-        /// <exception cref="ParsingException">
-        ///     Thrown if the data could not be parsed
-        /// </exception>
-        public IniData Parse(string iniDataString)
-        {
-            
-            IniData iniData = Configuration.CaseInsensitive ? new IniDataCaseInsensitive() : new IniData();
-            iniData.Configuration = this.Configuration.Clone();
-
-            if (string.IsNullOrEmpty(iniDataString))
-            {
-                return iniData;
-            }
-
-            _errorExceptions.Clear();
-            _currentCommentListTemp.Clear();
-            _currentSectionNameTemp = null;
-
-            try
-            {
-                var lines = iniDataString.Split(new []{"\n", "\r\n"}, StringSplitOptions.None);
-                for (int lineNumber = 0; lineNumber < lines.Length; lineNumber++)
-                {
-                    var line = lines[lineNumber];
-
-                    if (line.Trim() == String.Empty) continue;
-
-                    try
-                    {
-                        ProcessLine(line, iniData);
-                    }
-                    catch (Exception ex)
-                    {
-                        var errorEx = new ParsingException(ex.Message, lineNumber+1, line, ex);
-                        if (Configuration.ThrowExceptionsOnError) 
-                        {
-                            throw errorEx;
-                        }
-                        else
-                        {
-                            _errorExceptions.Add(errorEx);
-                        }
-
-                    }
-                }
-
-                // Orphan comments, assing to last section/key value
-                if (_currentCommentListTemp.Count > 0)
-                {
-                    // Check if there are actually sections in the file
-                    if (iniData.Sections.Count > 0)
-                    {
-                        iniData.Sections.GetSectionData(_currentSectionNameTemp).TrailingComments
-                            .AddRange(_currentCommentListTemp);
-                    }
-                    // No sections, put the comment in the last key value pair
-                    // but only if the ini file contains at least one key-value pair
-                    else if (iniData.Global.Count > 0) 
-                    {
-                        iniData.Global.GetLast().Comments
-                            .AddRange(_currentCommentListTemp);
-                    }
-                    
-                    
-                    _currentCommentListTemp.Clear();
-                }
-
-            }
-            catch(Exception ex)
-            {
-                _errorExceptions.Add(ex);
-                if (Configuration.ThrowExceptionsOnError) 
-                { 
-                    throw;
-                }
-            }
-
-
-            if (HasError) return null;
-            return (IniData)iniData.Clone();
-        }
         #endregion
 
-        #region Template Method Design Pattern 
+        #region Template Method Design Pattern
+
         // All this methods controls the parsing behaviour, so it can be modified 
         // in derived classes.
         // See http://www.dofactory.com/Patterns/PatternTemplate.aspx for an
@@ -174,7 +197,7 @@ namespace Azurlane.IniFileParser.Parser
         // Probably for the most common cases you can change the parsing behavior
         //  using a custom configuration object rather than creating derived classes.
         // See IniParserConfiguration interface, and IniDataParser constructor
-		//  to change the default configuration.
+        //  to change the default configuration.
 
         /// <summary>
         ///     Checks if a given string contains a comment.
@@ -187,8 +210,8 @@ namespace Azurlane.IniFileParser.Parser
         /// </returns>
         protected virtual bool LineContainsAComment(string line)
         {
-            return !string.IsNullOrEmpty(line) 
-                && Configuration.CommentRegex.Match(line).Success;
+            return !string.IsNullOrEmpty(line)
+                   && Configuration.CommentRegex.Match(line).Success;
         }
 
         /// <summary>
@@ -202,8 +225,8 @@ namespace Azurlane.IniFileParser.Parser
         /// </returns>
         protected virtual bool LineMatchesASection(string line)
         {
-            return !string.IsNullOrEmpty(line) 
-                && Configuration.SectionRegex.Match(line).Success;
+            return !string.IsNullOrEmpty(line)
+                   && Configuration.SectionRegex.Match(line).Success;
         }
 
         /// <summary>
@@ -249,10 +272,7 @@ namespace Azurlane.IniFileParser.Parser
             currentLine = currentLine.Trim();
 
             // Extract comments from current line and store them in a tmp field
-            if (LineContainsAComment(currentLine))
-            {
-                currentLine = ExtractComment(currentLine);
-            }
+            if (LineContainsAComment(currentLine)) currentLine = ExtractComment(currentLine);
 
             // By default comments must span a complete line (i.e. the comment character
             // must be located at the beginning of a line, so it seems that the following
@@ -305,10 +325,7 @@ namespace Azurlane.IniFileParser.Parser
             sectionName = sectionName.Substring(1, sectionName.Length - 2).Trim();
 
             // Check that the section's name is not empty
-            if (sectionName == string.Empty)
-            {
-                throw new ParsingException("Section name is empty");
-            }
+            if (sectionName == string.Empty) throw new ParsingException("Section name is empty");
 
             // Temporally save section name.
             _currentSectionNameTemp = sectionName;
@@ -316,12 +333,10 @@ namespace Azurlane.IniFileParser.Parser
             //Checks if the section already exists
             if (currentIniData.Sections.ContainsSection(sectionName))
             {
-                if (Configuration.AllowDuplicateSections)
-                {
-                    return;
-                }
+                if (Configuration.AllowDuplicateSections) return;
 
-                throw new ParsingException(string.Format("Duplicate section with name '{0}' on line '{1}'", sectionName, line));
+                throw new ParsingException(string.Format("Duplicate section with name '{0}' on line '{1}'", sectionName,
+                    line));
             }
 
 
@@ -331,7 +346,6 @@ namespace Azurlane.IniFileParser.Parser
             // Save comments read until now and assign them to this section
             currentIniData.Sections.GetSectionData(sectionName).LeadingComments = _currentCommentListTemp;
             _currentCommentListTemp.Clear();
-
         }
 
         /// <summary>
@@ -345,7 +359,7 @@ namespace Azurlane.IniFileParser.Parser
             // get key and value data
             string key = ExtractKey(line);
 
-			if (string.IsNullOrEmpty(key) && Configuration.SkipInvalidLines) return;
+            if (string.IsNullOrEmpty(key) && Configuration.SkipInvalidLines) return;
 
             string value = ExtractValue(line);
 
@@ -353,9 +367,7 @@ namespace Azurlane.IniFileParser.Parser
             if (string.IsNullOrEmpty(_currentSectionNameTemp))
             {
                 if (!Configuration.AllowKeysWithoutSection)
-                {
                     throw new ParsingException("key value pairs must be enclosed in a section");
-                }
 
                 AddKeyToKeyValueCollection(key, value, currentIniData.Global, "global");
             }
@@ -370,7 +382,7 @@ namespace Azurlane.IniFileParser.Parser
         /// <summary>
         ///     Extracts the key portion of a string containing a key/value pair..
         /// </summary>
-        /// <param name="s">    
+        /// <param name="s">
         ///     The string to be processed, which contains a key/value pair
         /// </param>
         /// <returns>
@@ -402,54 +414,15 @@ namespace Azurlane.IniFileParser.Parser
         /// <summary>
         ///     Abstract Method that decides what to do in case we are trying to add a duplicated key to a section
         /// </summary>
-        protected virtual void HandleDuplicatedKeyInCollection(string key, string value, KeyDataCollection keyDataCollection, string sectionName)
+        protected virtual void HandleDuplicatedKeyInCollection(string key, string value,
+            KeyDataCollection keyDataCollection, string sectionName)
         {
             if (!Configuration.AllowDuplicateKeys)
-            {
-                throw new ParsingException(string.Format("Duplicated key '{0}' found in section '{1}", key, sectionName));
-            }
-            else if(Configuration.OverrideDuplicateKeys)
-            {
-                keyDataCollection[key] = value;
-            }
+                throw new ParsingException(
+                    string.Format("Duplicated key '{0}' found in section '{1}", key, sectionName));
+            if (Configuration.OverrideDuplicateKeys) keyDataCollection[key] = value;
         }
-        #endregion
 
-        #region Helpers
-        /// <summary>
-        ///     Adds a key to a concrete <see cref="KeyDataCollection"/> instance, checking
-        ///     if duplicate keys are allowed in the configuration
-        /// </summary>
-        /// <param name="key">
-        ///     Key name
-        /// </param>
-        /// <param name="value">
-        ///     Key's value
-        /// </param>
-        /// <param name="keyDataCollection">
-        ///     <see cref="KeyData"/> collection where the key should be inserted
-        /// </param>
-        /// <param name="sectionName">
-        ///     Name of the section where the <see cref="KeyDataCollection"/> is contained. 
-        ///     Used only for logging purposes.
-        /// </param>
-        private void AddKeyToKeyValueCollection(string key, string value, KeyDataCollection keyDataCollection, string sectionName)
-        {
-            // Check for duplicated keys
-            if (keyDataCollection.ContainsKey(key))
-            {
-                // We already have a key with the same name defined in the current section
-                HandleDuplicatedKeyInCollection(key, value, keyDataCollection, sectionName);
-            }
-            else
-            {
-                // Save the keys
-                keyDataCollection.AddKey(key, value);
-            }
-
-            keyDataCollection.GetKeyData(key).Comments = _currentCommentListTemp;
-            _currentCommentListTemp.Clear();
-        }
         #endregion
 
         #region Fields
@@ -463,6 +436,7 @@ namespace Azurlane.IniFileParser.Parser
         ///     Tmp var with the name of the seccion which is being process
         /// </summary>
         private string _currentSectionNameTemp;
+
         #endregion
     }
 }
