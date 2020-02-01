@@ -120,7 +120,7 @@ namespace Azurlane
                         Utils.Write("[Obsolete Autopatcher version]", true, true);
                         Utils.Write("Download the latest version from:", true, true);
                         Utils.Write(Properties.Resources.Repository, true, true);
-                        Abort = true;
+                        Abort = false;
                     }
                 }
             }

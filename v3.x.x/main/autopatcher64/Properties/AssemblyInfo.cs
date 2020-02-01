@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Azur Lane Scripts Autopatcher")]
-[assembly: AssemblyDescription("https://github.com/k0np4ku")]
+[assembly: AssemblyDescription("https://github.com/n0k0m3, forked from https://github.com/k0np4ku")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Azur Lane Scripts Autopatcher")]
