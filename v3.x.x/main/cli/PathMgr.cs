@@ -1,4 +1,7 @@
-﻿namespace Azurlane
+﻿using System.IO;
+using System.Reflection;
+
+namespace Azurlane
 {
     internal static class PathMgr
     {
@@ -12,11 +15,6 @@
             return path == null ? root : Path.Combine(root, path);
         }
 
-        internal static string Thirdparty(string path = null)
-        {
-            return path != null
-                ? Path.Combine(Local((string) ConfigMgr.GetValue(ConfigMgr.Key.Thirdparty)), path)
-                : Local((string) ConfigMgr.GetValue(ConfigMgr.Key.Thirdparty));
-        }
+        internal static string Thirdparty(string path = null) => path != null ? Path.Combine(Local((string)ConfigMgr.GetValue(ConfigMgr.Key.Thirdparty)), path) : Local((string)ConfigMgr.GetValue(ConfigMgr.Key.Thirdparty));
     }
 }

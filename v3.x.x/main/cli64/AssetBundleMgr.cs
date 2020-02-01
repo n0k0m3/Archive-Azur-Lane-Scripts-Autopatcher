@@ -1,4 +1,7 @@
-﻿using Azurlane.Properties;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace Azurlane
 {
@@ -11,6 +14,7 @@ namespace Azurlane
         static AssetBundleMgr()
         {
             if (DPatterns == null)
+            {
                 DPatterns = new List<byte[]>
                 {
                     new byte[]
@@ -19,8 +23,10 @@ namespace Azurlane
                         0x00, 0x00, 0x00, 0x06, 0x35, 0x2E, 0x78, 0x2E
                     }
                 };
+            }
 
             if (EPatterns == null)
+            {
                 EPatterns = new List<byte[]>
                 {
                     new byte[]
@@ -29,11 +35,12 @@ namespace Azurlane
                         0x85, 0x03, 0x16, 0xA3, 0x7F, 0x7B, 0x8B, 0x55
                     }
                 };
+            }
 
             if (DPatterns == null || EPatterns == null)
                 return;
 
-            var assembly = Assembly.Load(Resources.Salt);
+            var assembly = Assembly.Load(Properties.Resources.Salt);
             Instance = Activator.CreateInstance(assembly.GetType("LL.Salt"));
         }
 
@@ -42,15 +49,18 @@ namespace Azurlane
             try
             {
                 foreach (var b in b2)
+                {
                     for (var i = 0; i < b.Length; i++)
+                    {
                         if (b1[i] != b[i])
                             return false;
+                    }
+                }
             }
             catch (Exception e)
             {
                 Utils.LogException("Exception detected during Compare.2", e);
             }
-
             return true;
         }
 
@@ -64,7 +74,6 @@ namespace Azurlane
                     Utils.LogInfo("AssetBundle is already encrypted... <aborted>", true, true);
                     return;
                 }
-
                 if (task == Tasks.Unpack || task == Tasks.Repack)
                     Execute(bytes, path, Tasks.Decrypt);
             }
@@ -83,18 +92,22 @@ namespace Azurlane
             }
 
             if (task == Tasks.Decrypt || task == Tasks.Encrypt)
+            {
                 Execute(bytes, path, task);
-            else if (task == Tasks.Unpack || task == Tasks.Repack) Execute(path, task);
+            }
+            else if (task == Tasks.Unpack || task == Tasks.Repack)
+            {
+                Execute(path, task);
+            }
             Program.IsValid = true;
         }
 
         private static void Execute(byte[] bytes, string path, Tasks task)
         {
-            Utils.LogInfo("{0} {1}...", true, false, task == Tasks.Decrypt ? "Decrypting" : "Encrypting",
-                Path.GetFileName(path));
+            Utils.LogInfo("{0} {1}...", true, false, task == Tasks.Decrypt ? "Decrypting" : "Encrypting", Path.GetFileName(path));
 
             var method = Instance.GetType().GetMethod("Make", BindingFlags.Static | BindingFlags.Public);
-            bytes = (byte[]) method.Invoke(Instance, new object[] {bytes, task == Tasks.Encrypt});
+            bytes = (byte[])method.Invoke(Instance, new object[] { bytes, task == Tasks.Encrypt });
 
             File.WriteAllBytes(path, bytes);
             Utils.Write(" <done>", false, true);
@@ -102,10 +115,8 @@ namespace Azurlane
 
         private static void Execute(string path, Tasks task)
         {
-            Utils.LogInfo("{0} {1}...", true, false, task == Tasks.Unpack ? "Unpacking" : "Repacking",
-                Path.GetFileName(path));
-            Utils.Command($"UnityEX.exe {(task == Tasks.Unpack ? "export" : "import")} \"{path}\"",
-                PathMgr.Thirdparty("unityex"));
+            Utils.LogInfo("{0} {1}...", true, false, task == Tasks.Unpack ? "Unpacking" : "Repacking", Path.GetFileName(path));
+            Utils.Command($"UnityEX.exe {(task == Tasks.Unpack ? "export" : "import")} \"{path}\"", PathMgr.Thirdparty("unityex"));
             Utils.Write(" <done>", false, true);
         }
     }

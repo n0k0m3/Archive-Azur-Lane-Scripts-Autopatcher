@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Azurlane.IniFileParser.Model
 {
     /// <summary>
@@ -5,35 +9,18 @@ namespace Azurlane.IniFileParser.Model
     /// </summary>
     public class KeyDataCollection : ICloneable, IEnumerable<KeyData>
     {
-        private readonly IEqualityComparer<string> _searchComparer;
-
-        #region ICloneable Members
-
-        /// <summary>
-        ///     Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        ///     A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new KeyDataCollection(this, _searchComparer);
-        }
-
-        #endregion
-
+        IEqualityComparer<string> _searchComparer;
         #region Initialization
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="KeyDataCollection" /> class.
+        ///     Initializes a new instance of the <see cref="KeyDataCollection"/> class.
         /// </summary>
         public KeyDataCollection()
             : this(EqualityComparer<string>.Default)
-        {
-        }
+        { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="KeyDataCollection" /> class with a given
+        ///     Initializes a new instance of the <see cref="KeyDataCollection"/> class with a given
         ///     search comparer
         /// </summary>
         /// <param name="searchComparer">
@@ -46,24 +33,30 @@ namespace Azurlane.IniFileParser.Model
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="KeyDataCollection" /> class
-        ///     from a previous instance of <see cref="KeyDataCollection" />.
+        ///     Initializes a new instance of the <see cref="KeyDataCollection"/> class
+        ///     from a previous instance of <see cref="KeyDataCollection"/>.
         /// </summary>
         /// <remarks>
         ///     Data from the original KeyDataCollection instance is deeply copied
         /// </remarks>
         /// <param name="ori">
-        ///     The instance of the <see cref="KeyDataCollection" /> class
+        ///     The instance of the <see cref="KeyDataCollection"/> class 
         ///     used to create the new instance.
         /// </param>
         public KeyDataCollection(KeyDataCollection ori, IEqualityComparer<string> searchComparer)
             : this(searchComparer)
         {
             foreach (KeyData key in ori)
+            {
                 if (_keyData.ContainsKey(key.KeyName))
-                    _keyData[key.KeyName] = (KeyData) key.Clone();
+                {
+                    _keyData[key.KeyName] = (KeyData)key.Clone();
+                }
                 else
-                    _keyData.Add(key.KeyName, (KeyData) key.Clone());
+                {
+                    _keyData.Add(key.KeyName, (KeyData)key.Clone());
+                }
+            }
         }
 
         #endregion
@@ -95,16 +88,23 @@ namespace Azurlane.IniFileParser.Model
 
             set
             {
-                if (!_keyData.ContainsKey(keyName)) AddKey(keyName);
+                if (!_keyData.ContainsKey(keyName))
+                {
+                    this.AddKey(keyName);
+                }
 
                 _keyData[keyName].Value = value;
+
             }
         }
 
         /// <summary>
         ///     Return the number of keys in the collection
         /// </summary>
-        public int Count => _keyData.Count;
+        public int Count
+        {
+            get { return _keyData.Count; }
+        }
 
         #endregion
 
@@ -116,11 +116,8 @@ namespace Azurlane.IniFileParser.Model
         /// <param name="keyName">
         ///     New key to be added.
         /// </param>
-        /// <c>true</c>
-        /// if the key was added
-        /// <c>false</c>
-        /// if a key with the same name already exist 
-        /// in the collection
+        ///     <c>true</c> if the key was added  <c>false</c> if a key with the same name already exist 
+        ///     in the collection
         /// </returns>
         public bool AddKey(string keyName)
         {
@@ -133,8 +130,7 @@ namespace Azurlane.IniFileParser.Model
             return false;
         }
 
-        [Obsolete(
-            "Pottentially buggy method! Use AddKey(KeyData keyData) instead (See comments in code for an explanation of the bug)")]
+        [Obsolete("Pottentially buggy method! Use AddKey(KeyData keyData) instead (See comments in code for an explanation of the bug)")]
         public bool AddKey(string keyName, KeyData keyData)
         {
             // BUG: this actually can allow you to add the keyData having 
@@ -147,6 +143,7 @@ namespace Azurlane.IniFileParser.Model
             }
 
             return false;
+
         }
 
         /// <summary>
@@ -156,7 +153,7 @@ namespace Azurlane.IniFileParser.Model
         ///     KeyData instance.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if the key was added  <c>false</c> if a key with the same name already exist
+        ///     <c>true</c> if the key was added  <c>false</c> if a key with the same name already exist 
         ///     in the collection
         /// </returns>
         public bool AddKey(KeyData keyData)
@@ -169,7 +166,6 @@ namespace Azurlane.IniFileParser.Model
 
             return false;
         }
-
         /// <summary>
         ///     Adds a new key with the specified name and value to the collection
         /// </summary>
@@ -180,7 +176,7 @@ namespace Azurlane.IniFileParser.Model
         ///     Value associated to the key.
         /// </param>
         /// <returns>
-        ///     <c>true</c> if the key was added  <c>false</c> if a key with the same name already exist
+        ///     <c>true</c> if the key was added  <c>false</c> if a key with the same name already exist 
         ///     in the collection.
         /// </returns>
         public bool AddKey(string keyName, string keyValue)
@@ -192,6 +188,7 @@ namespace Azurlane.IniFileParser.Model
             }
 
             return false;
+
         }
 
         /// <summary>
@@ -199,29 +196,30 @@ namespace Azurlane.IniFileParser.Model
         /// </summary>
         public void ClearComments()
         {
-            foreach (var keydata in this) keydata.Comments.Clear();
+            foreach (var keydata in this)
+            {
+                keydata.Comments.Clear();
+            }
         }
 
         /// <summary>
-        ///     Gets if a specifyed key name exists in the collection.
+        /// Gets if a specifyed key name exists in the collection.
         /// </summary>
         /// <param name="keyName">Key name to search</param>
-        /// <returns>
-        ///     <c>true</c> if a key with the specified name exists in the collectoin
-        ///     <c>false</c> otherwise
-        /// </returns>
+        /// <returns><c>true</c> if a key with the specified name exists in the collectoin
+        /// <c>false</c> otherwise</returns>
         public bool ContainsKey(string keyName)
         {
             return _keyData.ContainsKey(keyName);
         }
 
         /// <summary>
-        ///     Retrieves the data for a specified key given its name
+        /// Retrieves the data for a specified key given its name
         /// </summary>
         /// <param name="keyName">Name of the key to retrieve.</param>
         /// <returns>
-        ///     A <see cref="KeyData" /> instance holding
-        ///     the key information or <c>null</c> if the key wasn't found.
+        /// A <see cref="KeyData"/> instance holding
+        /// the key information or <c>null</c> if the key wasn't found.
         /// </returns>
         public KeyData GetKeyData(string keyName)
         {
@@ -238,10 +236,11 @@ namespace Azurlane.IniFileParser.Model
                 GetKeyData(keyData.KeyName).Comments.AddRange(keyData.Comments);
                 this[keyData.KeyName] = keyData.Value;
             }
+
         }
 
         /// <summary>
-        ///     Deletes all keys in this collection.
+        /// 	Deletes all keys in this collection.
         /// </summary>
         public void RemoveAllKeys()
         {
@@ -249,22 +248,21 @@ namespace Azurlane.IniFileParser.Model
         }
 
         /// <summary>
-        ///     Deletes a previously existing key, including its associated data.
+        /// Deletes a previously existing key, including its associated data.
         /// </summary>
         /// <param name="keyName">The key to be removed.</param>
         /// <returns>
-        ///     <c>true</c> if a key with the specified name was removed
-        ///     <c>false</c> otherwise.
+        /// <c>true</c> if a key with the specified name was removed 
+        /// <c>false</c> otherwise.
         /// </returns>
         public bool RemoveKey(string keyName)
         {
             return _keyData.Remove(keyName);
         }
-
         /// <summary>
-        ///     Sets the key data associated to a specified key.
+        /// Sets the key data associated to a specified key.
         /// </summary>
-        /// <param name="data">The new <see cref="KeyData" /> for the key.</param>
+        /// <param name="data">The new <see cref="KeyData"/> for the key.</param>
         public void SetKeyData(KeyData data)
         {
             if (data == null) return;
@@ -280,7 +278,7 @@ namespace Azurlane.IniFileParser.Model
         #region IEnumerable<KeyData> Members
 
         /// <summary>
-        ///     Allows iteration througt the collection.
+        /// Allows iteration througt the collection.
         /// </summary>
         /// <returns>A strong-typed IEnumerator </returns>
         public IEnumerator<KeyData> GetEnumerator()
@@ -292,7 +290,7 @@ namespace Azurlane.IniFileParser.Model
         #region IEnumerable Members
 
         /// <summary>
-        ///     Implementation needed
+        /// Implementation needed
         /// </summary>
         /// <returns>A weak-typed IEnumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()
@@ -304,8 +302,23 @@ namespace Azurlane.IniFileParser.Model
 
         #endregion
 
-        #region Non-public Members
+        #region ICloneable Members
 
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>
+        /// A new object that is a copy of this instance.
+        /// </returns>
+        public object Clone()
+        {
+            return new KeyDataCollection(this, _searchComparer);
+        }
+
+        #endregion
+
+        #region Non-public Members
         // Hack for getting the last key value (if exists) w/out using LINQ
         // and maintain support for earlier versions of .NET
         internal KeyData GetLast()
@@ -319,10 +332,11 @@ namespace Azurlane.IniFileParser.Model
         }
 
         /// <summary>
-        ///     Collection of KeyData for a given section
+        /// Collection of KeyData for a given section
         /// </summary>
         private readonly Dictionary<string, KeyData> _keyData;
 
         #endregion
+
     }
 }

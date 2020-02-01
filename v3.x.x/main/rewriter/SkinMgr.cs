@@ -1,16 +1,18 @@
-﻿namespace Azurlane
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+
+namespace Azurlane
 {
     internal static class SkinMgr
     {
-        private const string DataPath = "Skin.ini";
         internal static Configuration Config;
-
+        private const string DataPath = "Skin.ini";
         private static string RewriteRawSkin(this string s)
         {
-            return new Regex(@"get_id_list_by_ship_group = {[\s\S]*?(?=\n.*?all)").Replace(s,
-                "get_id_list_by_ship_group = {},");
+            return new Regex(@"get_id_list_by_ship_group = {[\s\S]*?(?=\n.*?all)").Replace(s, "get_id_list_by_ship_group = {},");
         }
-
         internal static string Initialize(Configuration config, string s)
         {
             Config = config;
@@ -24,7 +26,7 @@
 
             GenerateData(rawShip, rawSkin);
 
-            var skinId = LoadData(DataPath).Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+            var skinId = LoadData(DataPath).Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             foreach (var id in skinId)
             {
                 if (id.Length < 1)
@@ -33,7 +35,6 @@
                 var baseId = id.Remove(id.Length - 1);
                 s = new Regex($"(skin_id =) {baseId}.*(,)").Replace(s, $"$1 {id}$2");
             }
-
             return s;
         }
 
@@ -49,13 +50,12 @@
                     shipData.Add(shipName, shipId);
             }
 
-            Dictionary<string, Dictionary<string, List<string>>> skinData =
-                new Dictionary<string, Dictionary<string, List<string>>>();
+            Dictionary<string, Dictionary<string, List<string>>> skinData = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (var ship in shipData)
             {
                 var shipName = ship.Key;
                 var shipId = ship.Value;
-                string pattern = @"\[" + Regex.Escape(shipId.Remove(shipId.Length - 1)) + @".*\] = \{[^\[]+\}";
+                string pattern = @"\["+Regex.Escape(shipId.Remove(shipId.Length - 1))+@".*\] = \{[^\[]+\}";
                 foreach (var skin in new Regex(pattern).Matches(rawSkin))
                 {
                     var skinName = new Regex("name = \"(.*)\"").Match(skin.ToString()).Result("$1");
@@ -97,7 +97,6 @@
                     rawText += $"{skinName[i]}:{skinId[i]}";
                     rawText += Environment.NewLine;
                 }
-
                 rawText += Environment.NewLine;
             }
 
@@ -106,22 +105,20 @@
                 if (File.ReadAllText(DataPath).Length < rawText.Length)
                     File.WriteAllText(DataPath, rawText);
             }
-            else
-            {
-                File.WriteAllText(DataPath, rawText);
-            }
+            else File.WriteAllText(DataPath, rawText);
         }
 
         private static string LoadData(string path)
         {
             var result = string.Empty;
             foreach (var line in File.ReadAllLines(path))
+            {
                 if (line.Contains("+"))
                 {
                     result += line.Split(':')[1];
                     result += Environment.NewLine;
                 }
-
+            }
             return result;
         }
 

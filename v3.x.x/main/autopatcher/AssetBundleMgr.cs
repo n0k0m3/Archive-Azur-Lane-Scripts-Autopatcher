@@ -1,4 +1,8 @@
-﻿namespace Azurlane
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace Azurlane
 {
     public class AssetBundleMgr
     {
@@ -8,6 +12,7 @@
         {
             // Check whether decryption patterns are null
             if (DecryptionPatterns == null)
+            {
                 // Initialize
                 DecryptionPatterns = new List<byte[]>
                 {
@@ -17,9 +22,11 @@
                         0x00, 0x00, 0x00, 0x06, 0x35, 0x2E, 0x78, 0x2E
                     }
                 };
+            }
 
             // Check whether encryption patterns are null
             if (EncryptionPatterns == null)
+            {
                 // Initialize
                 EncryptionPatterns = new List<byte[]>
                 {
@@ -29,6 +36,7 @@
                         0x85, 0x03, 0x16, 0xA3, 0x7F, 0x7B, 0x8B, 0x55
                     }
                 };
+            }
         }
 
         internal static bool CheckAssetBundle(string path)
@@ -60,15 +68,18 @@
             try
             {
                 foreach (var b in b2)
+                {
                     for (var i = 0; i < b.Length; i++)
+                    {
                         if (b1[i] != b[i])
                             return false;
+                    }
+                }
             }
             catch (Exception e)
             {
                 Utils.LogException("Exception detected during Compare.2", e);
             }
-
             return true;
         }
     }

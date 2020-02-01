@@ -1,5 +1,8 @@
-﻿using Azurlane.Properties;
-using NDesk.Options;
+﻿using NDesk.Options;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace Azurlane
 {
@@ -10,7 +13,7 @@ namespace Azurlane
         Decompile,
         Recompile,
         Unpack,
-        Repack
+        Repack,
     }
 
     public class Program
@@ -23,6 +26,19 @@ namespace Azurlane
 
         private static bool _abort;
         private static Options _currentOption = Options.None;
+
+        private enum Options
+        {
+            None,
+            LuaUnlock,
+            LuaLock,
+            LuaDecompile,
+            LuaRecompile,
+            AssetBundleDecrypt,
+            AssetBundleEncrypt,
+            AssetBundleUnpack,
+            AssetBundleRepack,
+        }
 
         private static void CheckDependencies()
         {
@@ -56,34 +72,34 @@ namespace Azurlane
             if (pythonVersion.Equals(0.0) || pythonVersion.Equals(-0.0))
             {
                 Utils.LogDebug("No python detected", true, true);
-                Utils.LogInfo(Resources.SolutionPythonMessage, true, true);
+                Utils.LogInfo(Properties.Resources.SolutionPythonMessage, true, true);
                 missingCount++;
             }
             else if (pythonVersion < 3.7)
             {
                 Utils.LogDebug("Detected Python version {0}.x - expected 3.7.x or newer", true, true, pythonVersion);
-                Utils.LogInfo(Resources.SolutionPythonMessage, true, true);
+                Utils.LogInfo(Properties.Resources.SolutionPythonMessage, true, true);
                 missingCount++;
             }
 
             if (!Directory.Exists(PathMgr.Thirdparty("ljd")))
             {
-                Utils.LogDebug(Resources.LuajitNotFoundMessage, true, true);
-                Utils.LogInfo(Resources.SolutionReferMessage, true, true);
+                Utils.LogDebug(Properties.Resources.LuajitNotFoundMessage, true, true);
+                Utils.LogInfo(Properties.Resources.SolutionReferMessage, true, true);
                 missingCount++;
             }
 
             if (!Directory.Exists(PathMgr.Thirdparty("luajit")))
             {
-                Utils.LogDebug(Resources.LjdNotFoundMessage, true, true);
-                Utils.LogInfo(Resources.SolutionReferMessage, true, true);
+                Utils.LogDebug(Properties.Resources.LjdNotFoundMessage, true, true);
+                Utils.LogInfo(Properties.Resources.SolutionReferMessage, true, true);
                 missingCount++;
             }
 
             if (!Directory.Exists(PathMgr.Thirdparty("unityex")))
             {
-                Utils.LogDebug(Resources.UnityExNotFoundMessage, true, true);
-                Utils.LogInfo(Resources.SolutionReferMessage, true, true);
+                Utils.LogDebug(Properties.Resources.UnityExNotFoundMessage, true, true);
+                Utils.LogInfo(Properties.Resources.SolutionReferMessage, true, true);
                 missingCount++;
             }
 
@@ -97,19 +113,19 @@ namespace Azurlane
             {
                 using (var wc = new System.Net.WebClient())
                 {
-                    var latestStatus = wc.DownloadString(Resources.CliStatus);
+                    var latestStatus = wc.DownloadString(Properties.Resources.CliStatus);
                     if (latestStatus != "ok")
                     {
                         _abort = true;
                         return;
                     }
 
-                    var latestVersion = wc.DownloadString(Resources.CliVersion);
-                    if ((string) ConfigMgr.GetValue(ConfigMgr.Key.Version) != latestVersion)
+                    var latestVersion = wc.DownloadString(Properties.Resources.CliVersion);
+                    if ((string)ConfigMgr.GetValue(ConfigMgr.Key.Version) != latestVersion)
                     {
                         Utils.Write("[Obsolete CLI version]", true, true);
                         Utils.Write("Download the latest version from:", true, true);
-                        Utils.Write(Resources.Repository, true, true);
+                        Utils.Write(Properties.Resources.Repository, true, true);
                         _abort = true;
                     }
                 }
@@ -142,7 +158,7 @@ namespace Azurlane
                 return;
 
             var showHelp = args.Length < 2;
-            var options = new OptionSet
+            var options = new OptionSet()
             {
                 {"dev", "Development Mode", v => IsDevMode = true},
                 {"u|unlock", "Decrypt Lua", v => _currentOption = Options.LuaUnlock},
@@ -153,26 +169,22 @@ namespace Azurlane
                 {"encrypt", "Encrypt AssetBundle", v => _currentOption = Options.AssetBundleEncrypt},
                 {"unpack", "Unpack AssetBundle", v => _currentOption = Options.AssetBundleUnpack},
                 {"repack", "Repack AssetBundle", v => _currentOption = Options.AssetBundleRepack},
-                {
-                    "<>", v =>
-                    {
-                        if (_currentOption == Options.None)
-                        {
-                            showHelp = true;
-                            return;
-                        }
-
-                        if (Parameters.TryGetValue(_currentOption, out var values))
-                        {
-                            values.Add(v);
-                        }
-                        else
-                        {
-                            values = new List<string> {v};
-                            Parameters.Add(_currentOption, values);
-                        }
+                {"<>", v => {
+                    if (_currentOption == Options.None) {
+                        showHelp = true;
+                        return;
                     }
-                }
+
+                    if (Parameters.TryGetValue(_currentOption, out var values))
+                    {
+                        values.Add(v);
+                    }
+                    else
+                    {
+                        values = new List<string> { v };
+                        Parameters.Add(_currentOption, values);
+                    }
+                }}
             };
 
             if (showHelp)
@@ -193,48 +205,49 @@ namespace Azurlane
             CheckVersion();
 
             foreach (var parameter in Parameters)
-            foreach (var value in parameter.Value)
             {
-                if (!File.Exists(value) && !Directory.Exists(value))
-                    Utils.Write($@"A file or directory named {value} does not exists.", true, true);
-                if (File.Exists(value))
+                foreach (var value in parameter.Value)
                 {
-                    if (OpContains(parameter.Key, "Lua")) ListOfLua.Add(Path.GetFullPath(value));
-                    else ListOfAssetBundle.Add(Path.GetFullPath(value));
-                }
-                else if (Directory.Exists(value))
-                {
-                    if (OpContains(parameter.Key, "Lua"))
-                        foreach (var file in Directory.GetFiles(Path.GetFullPath(value), "*.lua*",
-                            SearchOption.AllDirectories))
-                            ListOfLua.Add(file);
-                    else
-                        foreach (var file in Directory.GetFiles(Path.GetFullPath(value), "*",
-                            SearchOption.AllDirectories))
-                            ListOfAssetBundle.Add(file);
+                    if (!File.Exists(value) && !Directory.Exists(value))
+                    {
+                        Utils.Write($@"A file or directory named {value} does not exists.", true, true);
+                    }
+                    if (File.Exists(value))
+                    {
+                        if (OpContains(parameter.Key, "Lua")) ListOfLua.Add(Path.GetFullPath(value));
+                        else ListOfAssetBundle.Add(Path.GetFullPath(value));
+                    }
+                    else if (Directory.Exists(value))
+                    {
+                        if (OpContains(parameter.Key, "Lua"))
+                        {
+                            foreach (var file in Directory.GetFiles(Path.GetFullPath(value), "*.lua*", SearchOption.AllDirectories))
+                                ListOfLua.Add(file);
+                        }
+                        else
+                        {
+                            foreach (var file in Directory.GetFiles(Path.GetFullPath(value), "*", SearchOption.AllDirectories))
+                                ListOfAssetBundle.Add(file);
+                        }
+                    }
                 }
             }
 
             if (OpContains("Lua"))
+            {
                 foreach (var lua in ListOfLua)
-                    LuaMgr.Initialize(lua,
-                        OpContains(Options.LuaUnlock) ? Tasks.Decrypt :
-                        OpContains(Options.LuaLock) ? Tasks.Encrypt :
-                        OpContains(Options.LuaRecompile) ? Tasks.Recompile : Tasks.Decompile);
+                    LuaMgr.Initialize(lua, OpContains(Options.LuaUnlock) ? Tasks.Decrypt : OpContains(Options.LuaLock) ? Tasks.Encrypt : OpContains(Options.LuaRecompile) ? Tasks.Recompile : Tasks.Decompile);
+            }
             else if (OpContains("AssetBundle"))
+            {
                 foreach (var assetbundle in ListOfAssetBundle)
-                    AssetBundleMgr.Initialize(assetbundle,
-                        OpContains(Options.AssetBundleDecrypt) ? Tasks.Decrypt :
-                        OpContains(Options.AssetBundleEncrypt) ? Tasks.Encrypt :
-                        OpContains(Options.AssetBundleUnpack) ? Tasks.Unpack : Tasks.Repack);
+                    AssetBundleMgr.Initialize(assetbundle, OpContains(Options.AssetBundleDecrypt) ? Tasks.Decrypt : OpContains(Options.AssetBundleEncrypt) ? Tasks.Encrypt : OpContains(Options.AssetBundleUnpack) ? Tasks.Unpack : Tasks.Repack);
+            }
 
-            if (IsValid && !OpContains(Options.AssetBundleRepack) && !OpContains(Options.AssetBundleDecrypt) &&
-                !OpContains(Options.AssetBundleEncrypt))
+            if (IsValid && !OpContains(Options.AssetBundleRepack) && !OpContains(Options.AssetBundleDecrypt) && !OpContains(Options.AssetBundleEncrypt))
             {
                 Console.WriteLine();
-                Utils.Write(
-                    $"{(OpContains(Options.LuaUnlock) || OpContains(Options.AssetBundleDecrypt) ? "Decrypt" : OpContains(Options.LuaLock) || OpContains(Options.AssetBundleEncrypt) ? "Encrypt" : OpContains(Options.LuaDecompile) ? "Decompile" : OpContains(Options.LuaRecompile) ? "Recompile" : OpContains(Options.AssetBundleUnpack) ? "Unpacking" : "Repacking")} {(OpContains(_currentOption, "Lua") ? string.Empty : "assetbundle ")}is done",
-                    true, true);
+                Utils.Write($"{(OpContains(Options.LuaUnlock) || OpContains(Options.AssetBundleDecrypt) ? "Decrypt" : OpContains(Options.LuaLock) || OpContains(Options.AssetBundleEncrypt) ? "Encrypt" : OpContains(Options.LuaDecompile) ? "Decompile" : OpContains(Options.LuaRecompile) ? "Recompile" : OpContains(Options.AssetBundleUnpack) ? "Unpacking" : "Repacking")} {(OpContains(_currentOption, "Lua") ? string.Empty : "assetbundle ")}is done", true, true);
 
                 if (!IsDevMode && !OpContains(Options.AssetBundleUnpack))
                     Utils.Write("Success: {0} - Failed: {1}", true, true, LuaMgr.SuccessCount, LuaMgr.FailedCount);
@@ -246,36 +259,14 @@ namespace Azurlane
             Utils.Write("", true, true);
             Utils.Write("Azur Lane Command Line Tool", true, true);
             Utils.Write("Version {0}", true, true, ConfigMgr.GetValue(ConfigMgr.Key.Version));
-            Utils.Write("{0}", true, true, Resources.Author);
+            Utils.Write("{0}", true, true, Properties.Resources.Author);
             Utils.Write("", true, true);
         }
 
-        private static bool OpContains(Options option)
-        {
-            return _currentOption == option;
-        }
+        private static bool OpContains(Options option) => _currentOption == option;
 
-        private static bool OpContains(Options option, string key)
-        {
-            return option.ToString().Contains(key);
-        }
+        private static bool OpContains(Options option, string key) => option.ToString().Contains(key);
 
-        private static bool OpContains(string key)
-        {
-            return _currentOption.ToString().Contains(key);
-        }
-
-        private enum Options
-        {
-            None,
-            LuaUnlock,
-            LuaLock,
-            LuaDecompile,
-            LuaRecompile,
-            AssetBundleDecrypt,
-            AssetBundleEncrypt,
-            AssetBundleUnpack,
-            AssetBundleRepack
-        }
+        private static bool OpContains(string key) => _currentOption.ToString().Contains(key);
     }
 }
