@@ -27,7 +27,7 @@ namespace Azurlane
         internal static List<string> ListOfLua;
         internal static Dictionary<Mods, bool> ListOfMod;
         internal static string DirName = "CAB-android";
-        internal static string arch; 
+        internal static string Arch; 
 
         private static List<Action> _listOfAction;
 
@@ -231,16 +231,16 @@ namespace Azurlane
 
             if (args.Contains("64"))
             {
-                arch = @"64";
+                Arch = @"64";
                 Utils.Write(@"Selected scripts is 64 bits",true,true);
             }
             else if (args.Contains("32"))
             {
-                arch = @"32";
+                Arch = @"32";
                 Utils.Write(@"Selected scripts is 32 bits",true,true);
             }
 
-            DirName += arch;
+            DirName += Arch;
             
             var filePath = Path.GetFullPath(args[0]);
             var fileDirectoryPath = Path.GetDirectoryName(filePath);
@@ -258,6 +258,7 @@ namespace Azurlane
                 goto END;
             }
 
+            Utils.Write(DirName,true,true);
             Clean(fileName);
 
             if (!Directory.Exists(PathMgr.Temp()))
