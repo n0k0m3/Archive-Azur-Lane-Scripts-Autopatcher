@@ -15,7 +15,9 @@ namespace Azurlane.IniFileParser
         /// <summary>
         ///     Ctor
         /// </summary>
-        public FileIniDataParser() {}
+        public FileIniDataParser()
+        {
+        }
 
         /// <summary>
         ///     Ctor
@@ -26,26 +28,11 @@ namespace Azurlane.IniFileParser
             Parser = parser;
         }
 
-        #region Deprecated methods
-
-        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
-        public IniData LoadFile(string filePath)
-        {
-            return ReadFile(filePath);
-        }
-
-        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
-        public IniData LoadFile(string filePath, Encoding fileEncoding)
-        {
-            return ReadFile(filePath, fileEncoding);
-        }
-        #endregion
-
         /// <summary>
         ///     Implements reading ini data from a file.
         /// </summary>
         /// <remarks>
-        ///     Uses <see cref="Encoding.Default"/> codification for the file.
+        ///     Uses <see cref="Encoding.Default" /> codification for the file.
         /// </remarks>
         /// <param name="filePath">
         ///     Path to the file
@@ -73,9 +60,9 @@ namespace Azurlane.IniFileParser
             {
                 // (FileAccess.Read) we want to open the ini only for reading 
                 // (FileShare.ReadWrite) any other process should still have access to the ini file 
-                using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using (StreamReader sr = new StreamReader(fs, fileEncoding))
+                    using (var sr = new StreamReader(fs, fileEncoding))
                     {
                         return ReadData(sr);
                     }
@@ -83,9 +70,8 @@ namespace Azurlane.IniFileParser
             }
             catch (IOException ex)
             {
-                throw new ParsingException(String.Format("Could not parse file {0}", filePath), ex);
+                throw new ParsingException(string.Format("Could not parse file {0}", filePath), ex);
             }
-
         }
 
         /// <summary>
@@ -105,7 +91,7 @@ namespace Azurlane.IniFileParser
         {
             WriteFile(filePath, parsedData, Encoding.UTF8);
         }
-                             
+
         /// <summary>
         ///     Writes INI data to a text file.
         /// </summary>
@@ -122,8 +108,8 @@ namespace Azurlane.IniFileParser
         {
             // The default value can't be assigned as a default parameter value because it is not
             // a constant expression.
-			if (fileEncoding == null)
-				fileEncoding = Encoding.UTF8;
+            if (fileEncoding == null)
+                fileEncoding = Encoding.UTF8;
 
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentException("Bad filename.");
@@ -131,13 +117,29 @@ namespace Azurlane.IniFileParser
             if (parsedData == null)
                 throw new ArgumentNullException("parsedData");
 
-            using (FileStream fs = File.Open(filePath, FileMode.Create, FileAccess.Write))
+            using (var fs = File.Open(filePath, FileMode.Create, FileAccess.Write))
             {
-                using (StreamWriter sr = new StreamWriter(fs, fileEncoding))
+                using (var sr = new StreamWriter(fs, fileEncoding))
                 {
                     WriteData(sr, parsedData);
                 }
             }
         }
+
+        #region Deprecated methods
+
+        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
+        public IniData LoadFile(string filePath)
+        {
+            return ReadFile(filePath);
+        }
+
+        [Obsolete("Please use ReadFile method instead of this one as is more semantically accurate")]
+        public IniData LoadFile(string filePath, Encoding fileEncoding)
+        {
+            return ReadFile(filePath, fileEncoding);
+        }
+
+        #endregion
     }
 }
