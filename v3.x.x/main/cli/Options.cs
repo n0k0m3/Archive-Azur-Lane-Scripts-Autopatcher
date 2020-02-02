@@ -142,7 +142,7 @@ using System.Linq;
 using NDesk.Options;
 #endif
 
-namespace NDesk.Options
+namespace Azurlane
 {
     public class OptionValueCollection : IList, IList<string>
     {

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using Azurlane.Properties;
-using NDesk.Options;
 
 namespace Azurlane
 {

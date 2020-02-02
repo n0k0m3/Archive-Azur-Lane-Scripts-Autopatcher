@@ -9,6 +9,8 @@ namespace Azurlane.IniFileParser.Model
     /// </summary>
     public class SectionDataCollection : ICloneable, IEnumerable<SectionData>
     {
+        private readonly IEqualityComparer<string> _searchComparer;
+
         #region Non-public Members
 
         /// <summary>
@@ -17,8 +19,6 @@ namespace Azurlane.IniFileParser.Model
         private readonly Dictionary<string, SectionData> _sectionData;
 
         #endregion
-
-        private readonly IEqualityComparer<string> _searchComparer;
 
         #region ICloneable Members
 
