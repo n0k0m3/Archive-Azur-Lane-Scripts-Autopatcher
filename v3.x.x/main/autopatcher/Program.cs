@@ -16,9 +16,10 @@ namespace Azurlane
         internal static bool Abort;
         internal static List<string> ListOfLua;
         internal static Dictionary<Mods, bool> ListOfMod;
-        internal static string DirName = "CAB-android";
+        internal static string DirName = "CAB-";
         internal static string Arch;
         internal static string LuaArch;
+        internal static string Os;
 
         private static List<Action> _listOfAction;
 
@@ -172,6 +173,11 @@ namespace Azurlane
             //CheckVersion();
             CheckDependencies();
 
+            if ((bool) ConfigMgr.GetValue(ConfigMgr.Key.iOS))
+                Os = @"ios";
+            else
+                Os = @"android";
+
             AddLua(Resources.Aircraft);
             AddLua(Resources.Enemy);
 
@@ -253,15 +259,15 @@ namespace Azurlane
             {
                 Arch = @"64";
                 LuaArch = @"64";
-                Utils.LogInfo(@"Selected scripts is 64 bits", true, true);
+                Utils.LogInfo(@"Selected scripts is 64 bits "+Os, true, true);
             }
             else if (fileName.Contains("32"))
             {
                 Arch = @"32";
-                Utils.LogInfo(@"Selected scripts is 32 bits", true, true);
+                Utils.LogInfo(@"Selected scripts is 32 bits "+Os, true, true);
             }
 
-            DirName += Arch;
+            DirName = DirName + Os + Arch;
 
             Clean(fileName);
 
@@ -434,8 +440,11 @@ namespace Azurlane
                                     foreach (var lua in ListOfLua)
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
-                                            Utils.Command(
-                                                $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
+                                            if (Os == "android")
+                                            {
+                                                Utils.Command(
+                                                    $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
+                                            }
                                         }));
                                 }
 
