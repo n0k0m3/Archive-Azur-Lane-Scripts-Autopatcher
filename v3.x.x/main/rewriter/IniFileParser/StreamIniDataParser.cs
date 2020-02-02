@@ -6,21 +6,17 @@ using Azurlane.IniFileParser.Parser;
 
 namespace Azurlane.IniFileParser
 {
-
     /// <summary>
     ///     Represents an INI data parser for streams.
     /// </summary>
     public class StreamIniDataParser
     {
         /// <summary>
-        ///     This instance will handle ini data parsing and writing
-        /// </summary>
-        public IniDataParser Parser { get; protected set; }
-
-        /// <summary>
         ///     Ctor
         /// </summary>
-        public StreamIniDataParser() : this (new IniDataParser()) {}
+        public StreamIniDataParser() : this(new IniDataParser())
+        {
+        }
 
         /// <summary>
         ///     Ctor
@@ -30,6 +26,12 @@ namespace Azurlane.IniFileParser
         {
             Parser = parser;
         }
+
+        /// <summary>
+        ///     This instance will handle ini data parsing and writing
+        /// </summary>
+        public IniDataParser Parser { get; protected set; }
+
         #region Public Methods
 
         /// <summary>
@@ -37,16 +39,16 @@ namespace Azurlane.IniFileParser
         /// </summary>
         /// <param name="reader">Reader stream.</param>
         /// <returns>
-        ///     And <see cref="IniData"/> instance with the readed ini data parsed.
+        ///     And <see cref="IniData" /> instance with the readed ini data parsed.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="reader"/> is <c>null</c>.
+        ///     Thrown if <paramref name="reader" /> is <c>null</c>.
         /// </exception>
         public IniData ReadData(StreamReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
-            
+
             return Parser.Parse(reader.ReadToEnd());
         }
 
@@ -54,9 +56,9 @@ namespace Azurlane.IniFileParser
         ///     Writes the ini data to a stream.
         /// </summary>
         /// <param name="writer">A write stream where the ini data will be stored</param>
-        /// <param name="iniData">An <see cref="IniData"/> instance.</param>
+        /// <param name="iniData">An <see cref="IniData" /> instance.</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="writer"/> is <c>null</c>.
+        ///     Thrown if <paramref name="writer" /> is <c>null</c>.
         /// </exception>
         public void WriteData(StreamWriter writer, IniData iniData)
         {
@@ -68,15 +70,15 @@ namespace Azurlane.IniFileParser
             writer.Write(iniData.ToString());
         }
 
-        
+
         /// <summary>
         ///     Writes the ini data to a stream.
         /// </summary>
         /// <param name="writer">A write stream where the ini data will be stored</param>
-        /// <param name="iniData">An <see cref="IniData"/> instance.</param>
+        /// <param name="iniData">An <see cref="IniData" /> instance.</param>
         /// <param name="formatter">Formaterr instance that controls how the ini data is transformed to a string</param>
         /// <exception cref="ArgumentNullException">
-        ///     Thrown if <paramref name="writer"/> is <c>null</c>.
+        ///     Thrown if <paramref name="writer" /> is <c>null</c>.
         /// </exception>
         public void WriteData(StreamWriter writer, IniData iniData, IIniDataFormatter formatter)
         {

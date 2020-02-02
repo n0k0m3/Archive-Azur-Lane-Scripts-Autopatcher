@@ -1,13 +1,15 @@
-﻿using Azurlane.IniFileParser;
-using Azurlane.IniFileParser.Model;
-using System.IO;
+﻿using System.IO;
 using System.Text.RegularExpressions;
+using Azurlane.IniFileParser;
 
 namespace Azurlane
 {
     internal static class Program
     {
-        private static bool GetBool(this Configuration config, string section, string key) => config.Ini[section][key].ToLower() == "true";
+        private static bool GetBool(this Configuration config, string section, string key)
+        {
+            return config.Ini[section][key].ToLower() == "true";
+        }
 
         private static string GetString(this Configuration config, string section, string key)
         {
@@ -15,7 +17,10 @@ namespace Azurlane
             return value.ToLower() == "false" || value.ToLower() == "ignore" ? "ignore" : value;
         }
 
-        private static bool IsIgnore(this string s) => s == "ignore";
+        private static bool IsIgnore(this string s)
+        {
+            return s == "ignore";
+        }
 
         private static void Load(this Configuration config, string configPath)
         {
@@ -147,20 +152,20 @@ namespace Azurlane
                 }
 
                 if (filePath.Contains("ship_data_statistics") && config.Other.ReplaceSkin)
-                {
                     content = SkinMgr.Initialize(config, content);
-                }
 
                 if (filePath.Contains("chapter_template") && config.Other.EasyMode)
                 {
                     content = content.RewriteAttribute("investigation_ratio", "0");
-                    content = content.RewriteLargeGroup("limitation","\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t");
+                    content = content.RewriteLargeGroup("limitation",
+                        "\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t0,\n\t\t\t\t\t0,\n\t\t\t\t\t0\n\t\t\t\t}\n\t\t\t}\n\t\t");
                     content = content.RewriteLargeGroup("property_limitation", null);
                     content = content.RewriteLargeGroup("ambush_expedition_list", null);
                     content = content.RewriteLargeGroup("ambush_event_ratio", null);
-                    content = content.RewriteLargeGroup("ambush_ratio_extra", "\n\t\t\t{\n\t\t\t\t-20000\n\t\t\t}\n\t\t");
+                    content = content.RewriteLargeGroup("ambush_ratio_extra",
+                        "\n\t\t\t{\n\t\t\t\t-20000\n\t\t\t}\n\t\t");
                 }
-                
+
                 File.WriteAllText(filePath, content);
             }
         }
@@ -224,7 +229,7 @@ namespace Azurlane
 
             // [Other]
             config.Other.ReplaceSkin = config.GetBool("Other", "ReplaceSkin");
-            config.Other.EasyMode = config.GetBool("Other", "EasyMode");            
+            config.Other.EasyMode = config.GetBool("Other", "EasyMode");
         }
 
         private static string RewriteAttribute(this string s, string pattern, string replacement)
@@ -239,123 +244,14 @@ namespace Azurlane
 
         private static string RewriteLargeGroup(this string s, string pattern, string replacement)
         {
-            return new Regex(@"((?<!\w)"+pattern+@" = {)[\s\S]*?(},(?=\s+?[a-z]))").Replace(s, $"$1{replacement}$2");
+            return new Regex(@"((?<!\w)" + pattern + @" = {)[\s\S]*?(},(?=\s+?[a-z]))")
+                .Replace(s, $"$1{replacement}$2");
         }
 
         private static string RewritePLimit(this string s)
         {
-            return new Regex(@"property_limitation = {[\s\S]*?(?=\n.*?expedition)").Replace(s, "property_limitation = {},");
-        }
-    }
-
-    internal class Configuration
-    {
-        internal AAircraft Aircraft;
-        internal CCommon Common;
-        internal EEnemy Enemy;
-        internal MMods Mods;
-        internal OOther Other;
-        internal PPath Path;
-        internal WWeapon Weapon;
-
-        internal Configuration()
-        {
-            if (Common == null)
-                Common = new CCommon();
-
-            if (Path == null)
-                Path = new PPath();
-
-            if (Mods == null)
-                Mods = new MMods();
-
-            if (Aircraft == null)
-                Aircraft = new AAircraft();
-
-            if (Weapon == null)
-                Weapon = new WWeapon();
-
-            if (Enemy == null)
-                Enemy = new EEnemy();
-
-            if (Other == null)
-                Other = new OOther();
-        }
-
-        internal IniData Ini { get; set; }
-
-        internal class AAircraft
-        {
-            internal string Accuracy { get; set; }
-            internal string AccuracyGrowth { get; set; }
-            internal string AttackPower { get; set; }
-            internal string AttackPowerGrowth { get; set; }
-            internal string CrashDamage { get; set; }
-            internal string Hp { get; set; }
-            internal string HpGrowth { get; set; }
-            internal string Speed { get; set; }
-        }
-
-        internal class CCommon
-        {
-            internal string Version { get; set; }
-        }
-
-        internal class EEnemy
-        {
-            internal string AntiAir { get; set; }
-            internal string AntiAirGrowth { get; set; }
-            internal string AntiSubmarine { get; set; }
-            internal string Armor { get; set; }
-            internal string ArmorGrowth { get; set; }
-            internal string Cannon { get; set; }
-            internal string CannonGrowth { get; set; }
-            internal string Evasion { get; set; }
-            internal string EvasionGrowth { get; set; }
-            internal string Hit { get; set; }
-            internal string HitGrowth { get; set; }
-            internal string Hp { get; set; }
-            internal string HpGrowth { get; set; }
-            internal string Luck { get; set; }
-            internal string LuckGrowth { get; set; }
-            internal string Reload { get; set; }
-            internal string ReloadGrowth { get; set; }
-            internal bool RemoveSkill { get; set; }
-            internal string Speed { get; set; }
-            internal string SpeedGrowth { get; set; }
-            internal string Torpedo { get; set; }
-            internal string TorpedoGrowth { get; set; }
-        }
-
-        internal class MMods
-        {
-            internal bool GodMode { get; set; }
-            internal bool GodModeCooldown { get; set; }
-            internal bool GodModeDamage { get; set; }
-            internal bool GodModeDamageCooldown { get; set; }
-            internal bool GodModeDamageCooldownWeakEnemy { get; set; }
-            internal bool GodModeDamageWeakEnemy { get; set; }
-            internal bool GodModeWeakEnemy { get; set; }
-            internal bool WeakEnemy { get; set; }
-        }
-
-        internal class OOther
-        {
-            internal bool ReplaceSkin { get; set; }
-            internal bool EasyMode { get; set; }
-            
-        }
-
-        internal class PPath
-        {
-            internal string Thirdparty { get; set; }
-            internal string Tmp { get; set; }
-        }
-
-        internal class WWeapon
-        {
-            internal string Damage { get; set; }
-            internal string ReloadMax { get; set; }
+            return new Regex(@"property_limitation = {[\s\S]*?(?=\n.*?expedition)").Replace(s,
+                "property_limitation = {},");
         }
     }
 }

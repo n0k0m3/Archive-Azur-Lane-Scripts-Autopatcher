@@ -3,7 +3,7 @@ namespace Azurlane.IniFileParser.Helpers
     internal static class Assert
     {
         /// <summary>
-        /// Asserts that a strings has no blank spaces.
+        ///     Asserts that a strings has no blank spaces.
         /// </summary>
         /// <param name="s">The string to be checked.</param>
         /// <returns></returns>
@@ -12,5 +12,4 @@ namespace Azurlane.IniFileParser.Helpers
             return !s.Contains(" ");
         }
     }
-
 }

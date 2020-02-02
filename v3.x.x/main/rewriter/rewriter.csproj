@@ -37,10 +37,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="IniFileParser\Exceptions\ParsingException.cs" />
-    <Compile Include="IniFileParser\FileIniParser.cs" />
+    <Compile Include="IniFileParser\FileIniDataParser.cs" />
     <Compile Include="IniFileParser\Helpers\Assert.cs" />
     <Compile Include="IniFileParser\Model\Configuration\ConcatenateDuplicatedKeysIniParserConfiguration.cs" />
+    <Compile Include="IniFileParser\Model\Configuration\DefaultIniParserConfiguration.cs" />
     <Compile Include="IniFileParser\Model\Configuration\IniParserConfiguration.cs" />
     <Compile Include="IniFileParser\Model\Formatting\DefaultIniDataFormatter.cs" />
     <Compile Include="IniFileParser\Model\Formatting\IIniDataFormatter.cs" />

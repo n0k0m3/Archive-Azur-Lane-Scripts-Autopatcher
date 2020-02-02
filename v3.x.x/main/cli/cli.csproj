@@ -40,7 +40,13 @@
     <Compile Include="AssetBundleMgr.cs" />
     <Compile Include="ConfigMgr.cs" />
     <Compile Include="LuaMgr.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="Option.cs" />
+    <Compile Include="OptionAction.cs" />
+    <Compile Include="OptionContext.cs" />
+    <Compile Include="OptionException.cs" />
+    <Compile Include="OptionValueCollection.cs" />
+    <Compile Include="OptionSet.cs" />
+    <Compile Include="OptionValueType.cs" />
     <Compile Include="PathMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -49,6 +55,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Tasks.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

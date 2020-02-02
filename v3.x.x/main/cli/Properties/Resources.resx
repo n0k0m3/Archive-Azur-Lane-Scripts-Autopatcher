@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Author" xml:space="preserve">
-    <value>github.com/k0np4ku</value>
+    <value>github.com/n0k0m3, forked from github.com/k0np4ku</value>
   </data>
   <data name="CliStatus" xml:space="preserve">
     <value>https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/status.txt</value>
@@ -137,7 +137,7 @@
     <value>Not found: LuaJIT Just-In-Time Compiler</value>
   </data>
   <data name="Repository" xml:space="preserve">
-    <value>github.com/k0np4ku/Azur-Lane-Autopatcher</value>
+    <value>github.com/n0k0m3/Azur-Lane-Autopatcher</value>
   </data>
   <data name="Salt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Salt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -146,7 +146,7 @@
     <value>Install the latest version of Python to solve this issue</value>
   </data>
   <data name="SolutionReferMessage" xml:space="preserve">
-    <value>Refer to one of k0np4ku's repository to solve this issue</value>
+    <value>Refer to one of n0k0m3's repository to solve this issue</value>
   </data>
   <data name="UnityExNotFoundMessage" xml:space="preserve">
     <value>Not found: UnityEx.exe</value>
