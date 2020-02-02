@@ -30,6 +30,7 @@ namespace Azurlane
         internal static Dictionary<Mods, bool> ListOfMod;
         internal static string DirName = "CAB-android";
         internal static string Arch;
+        internal static string LuaArch;
 
         private static List<Action> _listOfAction;
 
@@ -263,12 +264,13 @@ namespace Azurlane
             if (fileName.Contains("64"))
             {
                 Arch = @"64";
-                Utils.Write(@"Selected scripts is 64 bits", true, true);
+                LuaArch = @"64";
+                Utils.LogInfo(@"Selected scripts is 64 bits", true, true);
             }
             else if (fileName.Contains("32"))
             {
                 Arch = @"32";
-                Utils.Write(@"Selected scripts is 32 bits", true, true);
+                Utils.LogInfo(@"Selected scripts is 32 bits", true, true);
             }
 
             DirName += Arch;
@@ -302,7 +304,7 @@ namespace Azurlane
                         try
                         {
                             Utils.LogInfo("Decrypting AssetBundle...", true, false);
-                            Utils.Command($"Azcli.exe --dev --decrypt \"{PathMgr.Temp(fileName)}\"");
+                            Utils.Command($"Azcli{LuaArch}.exe --dev --decrypt \"{PathMgr.Temp(fileName)}\"");
                             Utils.Write(" <done>", false, true);
                         }
                         catch (Exception e)
@@ -316,7 +318,7 @@ namespace Azurlane
                         try
                         {
                             Utils.LogInfo("Unpacking AssetBundle...", true, false);
-                            Utils.Command($"Azcli.exe --dev --unpack \"{PathMgr.Temp(fileName)}\"");
+                            Utils.Command($"Azcli{LuaArch}.exe --dev --unpack \"{PathMgr.Temp(fileName)}\"");
                             Utils.Write(" <done>", false, true);
                         }
                         catch (Exception e)
@@ -331,7 +333,7 @@ namespace Azurlane
                             var showDoneMessage = true;
                             Utils.LogInfo("Decrypting Lua...", true, false);
                             foreach (var lua in ListOfLua) {
-                                Utils.Command($"Azcli.exe --dev --unlock \"{PathMgr.Lua(fileName, lua)}\"");
+                                Utils.Command($"Azcli{LuaArch}.exe --dev --unlock \"{PathMgr.Lua(fileName, lua)}\"");
 
                                 if (LuaMgr.CheckLuaState(PathMgr.Lua(fileName, lua)) != LuaMgr.State.Encrypted)
                                     break;
@@ -358,7 +360,8 @@ namespace Azurlane
                             foreach (var lua in ListOfLua)
                                 tasks.Add(Task.Factory.StartNew(() =>
                                 {
-                                    Utils.Command($"Azcli.exe --dev --decompile \"{PathMgr.Lua(fileName, lua)}\"");
+                                    Utils.Command(
+                                        $"Azcli{LuaArch}.exe --dev --decompile \"{PathMgr.Lua(fileName, lua)}\"");
                                     Utils.Write($@" {index}/{ListOfLua.Count}", false, false);
                                     index++;
                                 }));
@@ -444,7 +447,7 @@ namespace Azurlane
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
                                             Utils.Command(
-                                                $"Azcli.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
+                                                $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
                                         }));
                                 }
 
@@ -469,7 +472,7 @@ namespace Azurlane
                                     var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
 
                                     foreach (var lua in ListOfLua) {
-                                        Utils.Command($"Azcli.exe --dev --lock \"{PathMgr.Lua(modName, lua)}\"");
+                                        Utils.Command($"Azcli{LuaArch}.exe --dev --lock \"{PathMgr.Lua(modName, lua)}\"");
 
                                         if (LuaMgr.CheckLuaState(PathMgr.Lua(modName, lua)) != LuaMgr.State.Decrypted)
                                             break;
@@ -503,7 +506,7 @@ namespace Azurlane
 
                                     tasks.Add(Task.Factory.StartNew(() =>
                                     {
-                                        Utils.Command($"Azcli.exe --dev --repack \"{PathMgr.Temp(modName)}\"");
+                                        Utils.Command($"Azcli{LuaArch}.exe --dev --repack \"{PathMgr.Temp(modName)}\"");
                                         Utils.Write($@" {index}/{ListOfMod.Count(x => x.Value)}", false, false);
                                         index++;
                                     }));
@@ -527,7 +530,7 @@ namespace Azurlane
                                 if (mod.Value)
                                 {
                                     var modName = ($"scripts{Arch}-" + mod.Key).ToLower().Replace("_", "-");
-                                    Utils.Command($"Azcli.exe --dev --encrypt \"{PathMgr.Temp(modName)}\"");
+                                    Utils.Command($"Azcli{LuaArch}.exe --dev --encrypt \"{PathMgr.Temp(modName)}\"");
                                 }
 
                             Utils.Write(" <done>", false, true);
