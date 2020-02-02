@@ -430,7 +430,7 @@ namespace Azurlane
                             Utils.LogException("Exception detected during rewriting Lua", e);
                         }
                     },
-                    () =>
+                    /*() =>
                     {
                         try
                         {
@@ -456,7 +456,7 @@ namespace Azurlane
                             Utils.Write(" <failed>", false, true);
                             Utils.LogException("Exception detected during recompiling Lua", e);
                         }
-                    },
+                    },*/
 /*                     () =>
                     {
                         try {
