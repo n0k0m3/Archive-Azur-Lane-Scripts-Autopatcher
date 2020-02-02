@@ -7,16 +7,6 @@ using Azurlane.Properties;
 
 namespace Azurlane
 {
-    internal enum Tasks
-    {
-        Encrypt,
-        Decrypt,
-        Decompile,
-        Recompile,
-        Unpack,
-        Repack
-    }
-
     public class Program
     {
         internal static bool IsDevMode;

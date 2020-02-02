@@ -1,67 +1,67 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{93EC7EA6-3FAD-4296-9FA9-A348F7C70068}</ProjectGuid>
-        <OutputType>Exe</OutputType>
-        <RootNamespace>Azurlane</RootNamespace>
-        <AssemblyName>Azrewriter</AssemblyName>
-        <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <Deterministic>true</Deterministic>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>..\..\build\debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>none</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>..\..\build\release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="IniFileParser\Exceptions\ParsingException.cs" />
-        <Compile Include="IniFileParser\FileIniParser.cs" />
-        <Compile Include="IniFileParser\Helpers\Assert.cs" />
-        <Compile Include="IniFileParser\Model\Configuration\ConcatenateDuplicatedKeysIniParserConfiguration.cs" />
-        <Compile Include="IniFileParser\Model\Configuration\IniParserConfiguration.cs" />
-        <Compile Include="IniFileParser\Model\Formatting\DefaultIniDataFormatter.cs" />
-        <Compile Include="IniFileParser\Model\Formatting\IIniDataFormatter.cs" />
-        <Compile Include="IniFileParser\Model\IniData.cs" />
-        <Compile Include="IniFileParser\Model\IniDataCaseInsensitive.cs" />
-        <Compile Include="IniFileParser\Model\KeyData.cs" />
-        <Compile Include="IniFileParser\Model\KeyDataCollection.cs" />
-        <Compile Include="IniFileParser\Model\SectionData.cs" />
-        <Compile Include="IniFileParser\Model\SectionDataCollection.cs" />
-        <Compile Include="IniFileParser\Parser\ConcatenateDuplicatedKeysIniDataParser.cs" />
-        <Compile Include="IniFileParser\Parser\IniDataParser.cs" />
-        <Compile Include="IniFileParser\StreamIniDataParser.cs" />
-        <Compile Include="IniFileParser\StringIniParser.cs" />
-        <Compile Include="Program.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="SkinMgr.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="IniFileParser\Model\IniData.cs.rej" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{93EC7EA6-3FAD-4296-9FA9-A348F7C70068}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Azurlane</RootNamespace>
+    <AssemblyName>Azrewriter</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="IniFileParser\Exceptions\ParsingException.cs" />
+    <Compile Include="IniFileParser\FileIniDataParser.cs" />
+    <Compile Include="IniFileParser\Helpers\Assert.cs" />
+    <Compile Include="IniFileParser\Model\Configuration\ConcatenateDuplicatedKeysIniParserConfiguration.cs" />
+    <Compile Include="IniFileParser\Model\Configuration\DefaultIniParserConfiguration.cs" />
+    <Compile Include="IniFileParser\Model\Configuration\IniParserConfiguration.cs" />
+    <Compile Include="IniFileParser\Model\Formatting\DefaultIniDataFormatter.cs" />
+    <Compile Include="IniFileParser\Model\Formatting\IIniDataFormatter.cs" />
+    <Compile Include="IniFileParser\Model\IniData.cs" />
+    <Compile Include="IniFileParser\Model\IniDataCaseInsensitive.cs" />
+    <Compile Include="IniFileParser\Model\KeyData.cs" />
+    <Compile Include="IniFileParser\Model\KeyDataCollection.cs" />
+    <Compile Include="IniFileParser\Model\SectionData.cs" />
+    <Compile Include="IniFileParser\Model\SectionDataCollection.cs" />
+    <Compile Include="IniFileParser\Parser\ConcatenateDuplicatedKeysIniDataParser.cs" />
+    <Compile Include="IniFileParser\Parser\IniDataParser.cs" />
+    <Compile Include="IniFileParser\StreamIniDataParser.cs" />
+    <Compile Include="IniFileParser\StringIniParser.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkinMgr.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IniFileParser\Model\IniData.cs.rej" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
