@@ -16,7 +16,7 @@ namespace Azurlane
         internal static bool Abort;
         internal static List<string> ListOfLua;
         internal static Dictionary<Mods, bool> ListOfMod;
-        internal static string DirName = "CAB-android";
+        internal static string DirName = "CAB-";
         internal static string Arch;
         internal static string LuaArch;
 
@@ -172,6 +172,15 @@ namespace Azurlane
             //CheckVersion();
             CheckDependencies();
 
+            if ((bool) ConfigMgr.GetValue(ConfigMgr.Key.iOS))
+            {
+                DirName = DirName + "ios";
+            }
+            else
+            {
+                DirName = DirName + "android";
+            }
+            
             AddLua(Resources.Aircraft);
             AddLua(Resources.Enemy);
 

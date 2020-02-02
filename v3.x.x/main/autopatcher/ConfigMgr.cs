@@ -65,6 +65,7 @@ namespace Azurlane
         {
             Version,
             DevelopmentMode,
+            iOS,
             Tmp,
             Thirdparty,
             RemoveSkill,
