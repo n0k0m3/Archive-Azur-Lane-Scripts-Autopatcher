@@ -19,7 +19,7 @@ namespace Azurlane
         internal static string DirName = "CAB-";
         internal static string Arch;
         internal static string LuaArch;
-        internal static string os;
+        internal static string Os;
 
         private static List<Action> _listOfAction;
 
@@ -174,9 +174,9 @@ namespace Azurlane
             CheckDependencies();
 
             if ((bool) ConfigMgr.GetValue(ConfigMgr.Key.iOS))
-                os = @"ios";
+                Os = @"ios";
             else
-                os = @"android";
+                Os = @"android";
 
             AddLua(Resources.Aircraft);
             AddLua(Resources.Enemy);
@@ -259,15 +259,15 @@ namespace Azurlane
             {
                 Arch = @"64";
                 LuaArch = @"64";
-                Utils.LogInfo(@"Selected scripts is 64 bits", true, true);
+                Utils.LogInfo(@"Selected scripts is 64 bits "+Os, true, true);
             }
             else if (fileName.Contains("32"))
             {
                 Arch = @"32";
-                Utils.LogInfo(@"Selected scripts is 32 bits", true, true);
+                Utils.LogInfo(@"Selected scripts is 32 bits "+Os, true, true);
             }
 
-            DirName = DirName + os + Arch;
+            DirName = DirName + Os + Arch;
 
             Clean(fileName);
 
@@ -440,7 +440,7 @@ namespace Azurlane
                                     foreach (var lua in ListOfLua)
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
-                                            if (os == "android")
+                                            if (Os == "android")
                                             {
                                                 Utils.Command(
                                                     $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
