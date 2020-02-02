@@ -19,6 +19,7 @@ namespace Azurlane
         internal static string DirName = "CAB-";
         internal static string Arch;
         internal static string LuaArch;
+        internal static string os;
 
         private static List<Action> _listOfAction;
 
@@ -173,14 +174,10 @@ namespace Azurlane
             CheckDependencies();
 
             if ((bool) ConfigMgr.GetValue(ConfigMgr.Key.iOS))
-            {
-                DirName = DirName + "ios";
-            }
+                os = @"ios";
             else
-            {
-                DirName = DirName + "android";
-            }
-            
+                os = @"android";
+
             AddLua(Resources.Aircraft);
             AddLua(Resources.Enemy);
 
@@ -270,7 +267,7 @@ namespace Azurlane
                 Utils.LogInfo(@"Selected scripts is 32 bits", true, true);
             }
 
-            DirName += Arch;
+            DirName = DirName + os + Arch;
 
             Clean(fileName);
 
@@ -430,7 +427,7 @@ namespace Azurlane
                             Utils.LogException("Exception detected during rewriting Lua", e);
                         }
                     },
-                    /*() =>
+                    () =>
                     {
                         try
                         {
@@ -443,8 +440,11 @@ namespace Azurlane
                                     foreach (var lua in ListOfLua)
                                         tasks.Add(Task.Factory.StartNew(() =>
                                         {
-                                            Utils.Command(
-                                                $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
+                                            if (os == "android")
+                                            {
+                                                Utils.Command(
+                                                    $"Azcli{LuaArch}.exe --dev --recompile \"{PathMgr.Lua(modName, lua)}\"");
+                                            }
                                         }));
                                 }
 
@@ -456,7 +456,7 @@ namespace Azurlane
                             Utils.Write(" <failed>", false, true);
                             Utils.LogException("Exception detected during recompiling Lua", e);
                         }
-                    },*/
+                    },
 /*                     () =>
                     {
                         try {
