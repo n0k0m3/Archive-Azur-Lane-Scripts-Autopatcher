@@ -61,7 +61,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to github.com/k0np4ku.
+        ///   Looks up a localized string similar to github.com/n0k0m3, forked from github.com/k0np4ku.
         /// </summary>
         internal static string Author {
             get {
@@ -70,7 +70,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/status.txt.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/status.txt.
         /// </summary>
         internal static string CliStatus {
             get {
@@ -79,7 +79,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/version.txt.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/2k19/main/cli/version.txt.
         /// </summary>
         internal static string CliVersion {
             get {
@@ -116,7 +116,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to github.com/k0np4ku/Azur-Lane-Autopatcher.
+        ///   Looks up a localized string similar to github.com/n0k0m3/Azur-Lane-Autopatcher.
         /// </summary>
         internal static string Repository {
             get {
@@ -144,7 +144,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refer to one of k0np4ku&apos;s repository to solve this issue.
+        ///   Looks up a localized string similar to Refer to one of n0k0m3&apos;s repository to solve this issue.
         /// </summary>
         internal static string SolutionReferMessage {
             get {
