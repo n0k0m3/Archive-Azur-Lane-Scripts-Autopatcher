@@ -13,19 +13,23 @@ From n0k0m3:
 **v3.x.x** Currently being maintained and active
 
 ## Download
-You can download the binary from https://github.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/releases
+Download latest release from CI:
+| Branch | master  | staging |
+| ------------- | ------------- | ------------- |
+| **Build Status** | [![Build status](https://ci.appveyor.com/api/projects/status/s805jcqqllu508ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-u432k/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/x1faear9tfgs84ej/branch/staging?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-kqjs7/branch/staging)  | 
+
+
+You can also download the binary from https://github.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/releases
 
 ## Prerequisites (Minimum)
-1. .NET Framework 4.6.1 or newer https://www.microsoft.com/en-us/download/details.aspx?id=49982
-2. Python 3.7.x or newer, installed to PATH. (Python 3.* from Microsoft Store also works and doesn't require add to PATH)
+1. .NET Framework 4.5 or newer https://www.microsoft.com/en-us/download/details.aspx?id=30653 \
+(Only for Windows 7. Windows 8 and later comes preinstalled)
+2. Python 3.7.x or newer, installed to PATH. \
+(Python 3.* from Microsoft Store also works and doesn't require add to PATH)
 
 ## Installation
 **No installation required**
 
-1. Download latest build and 3rd party tools from https://github.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/releases
-
-2. Extract 3rdparty tools INSIDE your patcher folder (make sure the path will be `ALSA_<version>\3rdparty\*`
-
-**Note:** If the build doesn't include 3rd party tools, it doesn't mean that it is not needed, it means that 3rd party tools are not changed, check for it from older build 
+**Note:** From now on release build will include 3rdparty by default
 
 (Latest build with changes in 3rdparty: https://github.com/n0k0m3/Azur-Lane-Scripts-Autopatcher/releases/tag/appveyor-v3.0.3)

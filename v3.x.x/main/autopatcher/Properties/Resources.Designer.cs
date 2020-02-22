@@ -70,7 +70,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to github.com/k0np4ku.
+        ///   Looks up a localized string similar to github.com/n0k0m3, forked from github.com/k0np4ku.
         /// </summary>
         internal static string Author {
             get {
@@ -79,7 +79,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/status.txt.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/status.txt.
         /// </summary>
         internal static string AutopatcherStatus {
             get {
@@ -88,7 +88,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://raw.githubusercontent.com/k0np4ku/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/version.txt.
+        ///   Looks up a localized string similar to https://raw.githubusercontent.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/master/v3.x.x/main/autopatcher/version.txt.
         /// </summary>
         internal static string AutopatcherVersion {
             get {
@@ -98,22 +98,23 @@ namespace Azurlane.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to [Common]
-        ///Version=v3.0.1
-        ///DevelopmentMode=true
+        ///Version=v3.0.4
+        ///DevelopmentMode=false
+        ///iOS=false
         ///
         ///[Path]
         ///Tmp=tmp
         ///Thirdparty=3rdparty
         ///
         ///[Mods]
-        ///GodMode=false
-        ///WeakEnemy=false
-        ///GodMode+Damage=false
-        ///GodMode+Cooldown=false
-        ///GodMode+WeakEnemy=false
-        ///GodMode+Damage+Cooldown=false
+        ///GodMode=true
+        ///WeakEnemy=true
+        ///GodMode+Damage=true
+        ///GodMode+Cooldown=true
+        ///GodMode+WeakEnemy=true
+        ///GodMode+Damage+Cooldown=true
         ///GodMode+Damage+WeakEnemy=true
-        ///GodMode+Damage+Cooldown+WeakEnemy=false
+        ///GodMode+Damage+Cooldown+WeakEnemy=true
         ///
         ///[Aircraft]
         ///Hp=ignore
@@ -131,7 +132,7 @@ namespace Azurlane.Properties {
         ///
         ///[Enemy]
         ///AntiAir=ignore
-        ///AntiA [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Configuration {
             get {
@@ -156,24 +157,6 @@ namespace Azurlane.Properties {
                 return ResourceManager.GetString("EnemySkill", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to chapter_template(_loop).txt.
-        /// </summary>
-        internal static string MapData {
-            get {
-                return ResourceManager.GetString("MapData", resourceCulture);
-            }
-        }       
-
-        /// <summary>
-        ///   Looks up a localized string similar to chapter_template(_loop).txt.
-        /// </summary>
-        internal static string MapDataLoop {
-            get {
-                return ResourceManager.GetString("MapDataLoop", resourceCulture);
-            }
-        } 
         
         /// <summary>
         ///   Looks up a localized string similar to Not found: LuaJIT Raw-Bytecode Decompiler (ljd).
@@ -194,7 +177,25 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to github.com/k0np4ku/Azur-Lane-Autopatcher.
+        ///   Looks up a localized string similar to chapter_template.lua.txt.
+        /// </summary>
+        internal static string MapData {
+            get {
+                return ResourceManager.GetString("MapData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to chapter_template_loop.lua.txt.
+        /// </summary>
+        internal static string MapDataLoop {
+            get {
+                return ResourceManager.GetString("MapDataLoop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to github.com/n0k0m3/Azur-Lane-Autopatcher.
         /// </summary>
         internal static string Repository {
             get {
@@ -230,7 +231,7 @@ namespace Azurlane.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refer to one of k0np4ku&apos;s repository to solve this issue.
+        ///   Looks up a localized string similar to Refer to one of n0k0m3&apos;s repository to solve this issue.
         /// </summary>
         internal static string SolutionReferMessage {
             get {
