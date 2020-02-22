@@ -23,7 +23,7 @@ You can also download the binary from https://github.com/n0k0m3/Archive-Azur-Lan
 
 ## Prerequisites (Minimum)
 1. .NET Framework 4.5 or newer https://www.microsoft.com/en-us/download/details.aspx?id=30653 \
-(Only for Windows 7, Windows 8+ comes preinstalled)
+(Only for Windows 7. Windows 8 and later comes preinstalled)
 2. Python 3.7.x or newer, installed to PATH. \
 (Python 3.* from Microsoft Store also works and doesn't require add to PATH)
 
