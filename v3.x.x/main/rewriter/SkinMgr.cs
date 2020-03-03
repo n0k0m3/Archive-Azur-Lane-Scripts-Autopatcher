@@ -49,17 +49,18 @@ namespace Azurlane
             {
                 var shipName = new Regex("english_name = \"(.*)\"").Match(data.ToString()).Result("$1");
                 var shipId = new Regex(@"\[(.*)\]").Match(data.ToString()).Result("$1");
+                shipId = shipId.Remove(shipId.Length - 1);
 
-                if (!shipData.ContainsKey(shipName))
-                    shipData.Add(shipName, shipId);
+                if (!shipData.ContainsKey(shipId))
+                    shipData.Add(shipId, shipName);
             }
 
             var skinData = new Dictionary<string, Dictionary<string, List<string>>>();
             foreach (var ship in shipData)
             {
-                var shipName = ship.Key;
-                var shipId = ship.Value;
-                var pattern = @"\[" + Regex.Escape(shipId.Remove(shipId.Length - 1)) + @".*\] = \{[^\[]+\}";
+                var shipName = ship.Value;
+                var shipId = ship.Key;
+                var pattern = @"\[" + Regex.Escape(shipId) + @".*\] = \{[^\[]+\}";
                 foreach (var skin in new Regex(pattern).Matches(rawSkin))
                 {
                     var skinName = new Regex("name = \"(.*)\"").Match(skin.ToString()).Result("$1");
