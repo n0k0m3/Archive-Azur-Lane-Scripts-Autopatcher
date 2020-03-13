@@ -14,7 +14,7 @@ From n0k0m3:
 
 ## Download
 Download latest release from CI:
-| Branch | master  | staging |
+| Branch | master  | staging (beta) |
 | ------------- | ------------- | ------------- |
 | **Build Status** | [![Build status](https://ci.appveyor.com/api/projects/status/s805jcqqllu508ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-u432k/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/x1faear9tfgs84ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-kqjs7/branch/master)  | 
 
