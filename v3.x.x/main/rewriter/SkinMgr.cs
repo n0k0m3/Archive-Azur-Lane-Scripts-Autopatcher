@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Azurlane
 {
@@ -83,6 +84,7 @@ namespace Azurlane
                 }
             }
 
+            var skinsSettings = GetSkinsSettings(DataPath);
             var rawText = string.Empty;
             foreach (var skin in skinData)
             {
@@ -95,7 +97,11 @@ namespace Azurlane
 
                 for (var i = 0; i < skinName.Count; i++)
                 {
-                    if (i == 0 && !skinName[i].Equals("Wedding") && !skinName[i].Equals("Kai"))
+                    var skinSetting = skinsSettings.FirstOrDefault(x => x.Key.Equals(skinId[i]));
+                    
+                    if (skinSetting.Key != null)
+                        rawText += skinSetting.Value;
+                    else if (i == 0 && !skinName[i].Equals("Wedding") && !skinName[i].Equals("Kai"))
                         rawText += "+";
                     else rawText += "-";
 
@@ -117,6 +123,29 @@ namespace Azurlane
             }
         }
 
+        private static Dictionary<string, string> GetSkinsSettings(string path)
+        {
+            var skinsList = new Dictionary<string, string>();
+
+            if (!File.Exists(DataPath))
+                return skinsList;
+
+            foreach (var line in File.ReadAllLines(path))
+            {
+                if (line.Contains(":") && line.StartsWith("+") | line.StartsWith("-"))
+                {
+                    var skinSetting = line.Substring(0, 1);
+
+                    var skinData = line.Split(':');
+                    var skinId = skinData[skinData.Length - 1];
+
+                    skinsList.Add(skinId, skinSetting);
+                }
+            }
+
+            return skinsList;
+        }
+        
         private static string LoadData(string path)
         {
             var result = string.Empty;
