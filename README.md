@@ -16,7 +16,7 @@ From n0k0m3:
 Download latest release from CI:
 | Branch | master  | staging |
 | ------------- | ------------- | ------------- |
-| **Build Status** | [![Build status](https://ci.appveyor.com/api/projects/status/s805jcqqllu508ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-u432k/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/x1faear9tfgs84ej/branch/staging?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-kqjs7/branch/staging)  | 
+| **Build Status** | [![Build status](https://ci.appveyor.com/api/projects/status/s805jcqqllu508ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-u432k/branch/master)  | [![Build status](https://ci.appveyor.com/api/projects/status/x1faear9tfgs84ej/branch/master?svg=true)](https://ci.appveyor.com/project/minh6a/azur-lane-scripts-autopatcher-kqjs7/branch/master)  | 
 
 
 You can also download the binary from https://github.com/n0k0m3/Archive-Azur-Lane-Scripts-Autopatcher/releases
