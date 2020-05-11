@@ -69,7 +69,7 @@ namespace Azurlane
 
                     var id = Convert.ToInt32(skinId);
 
-                    if (!skinId.EndsWith("0") && (id < 900000 || id > 904000))
+                    if (!skinId.EndsWith("0") && (id < 900000 || id > 901000))
                     {
                         if (!skinData.ContainsKey(shipName))
                         {
