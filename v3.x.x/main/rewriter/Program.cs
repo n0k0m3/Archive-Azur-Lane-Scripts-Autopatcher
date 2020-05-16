@@ -73,7 +73,7 @@ namespace Azurlane
                         content = content.RewriteAttribute("armor", config.Enemy.Armor);
 
                     if (!config.Enemy.ArmorGrowth.IsIgnore())
-                        content = content.RewriteAttribute("ArmorGrowth", config.Enemy.Armor);
+                        content = content.RewriteAttribute("armor_growth", config.Enemy.Armor);
 
                     if (!config.Enemy.Cannon.IsIgnore())
                         content = content.RewriteAttribute("cannon", config.Enemy.Cannon);
